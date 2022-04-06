@@ -1,4 +1,4 @@
-package com.gimangi.singleline_note.ui
+package com.gimangi.singleline_note.ui.main
 
 import android.os.Bundle
 import com.gimangi.singleline_note.R
