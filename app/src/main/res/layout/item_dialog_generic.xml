@@ -7,20 +7,19 @@
     <data>
         <variable
             name="dialogText"
-            type="String" />
+            type="com.gimangi.singleline_note.data.DialogData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:elevation="10dp"
-        android:background="@drawable/rectangle_fill_white_12">
+        android:elevation="10dp">
 
         <TextView
             android:id="@+id/tv_dialog_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{dialogText}"
+            android:text="@{dialogText.title}"
             tools:text="다이얼로그 내용"
             android:fontFamily="@font/noto_sans_kr"
             android:textFontWeight="400"
@@ -39,23 +38,23 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@android:color/transparent"
-            android:text="@string/dialog_cancel"
+            android:text="@{dialogText.cancel}"
             android:textColor="@color/gray2"
             android:fontFamily="@font/noto_sans_kr"
             android:textFontWeight="400"
             android:includeFontPadding="false"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btn_dialog_delete"
+            app:layout_constraintEnd_toStartOf="@+id/btn_dialog_confirm"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_dialog_detail" />
 
         <android.widget.Button
-            android:id="@+id/btn_dialog_delete"
+            android:id="@+id/btn_dialog_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:text="@string/dialog_delete"
+            android:text="@{dialogText.confirm}"
             android:textColor="@color/red"
             android:fontFamily="@font/noto_sans_kr"
             android:textFontWeight="400"
