@@ -2,23 +2,36 @@ package com.gimangi.singleline_note.ui.main
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.MutableLiveData
 import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.adapter.MemoListAdapter
 import com.gimangi.singleline_note.data.MemoPreviewData
 import com.gimangi.singleline_note.databinding.ActivityMainBinding
 import com.gimangi.singleline_note.ui.base.BaseActivity
+import com.gimangi.singleline_note.viewmodel.MainViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 class MainActivity() :
     BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
+    private val mainViewModel: MainViewModel by viewModel()
+
     private lateinit var memoListAdapter: MemoListAdapter
+    private val searchResultData = MutableLiveData<String>()
+    private lateinit var memoPreviewList: MutableList<MemoPreviewData>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initMemoAdapter()
         initDummy()
+        initSearchLiveData()
+    }
+
+    private fun setMemoList(list: MutableList<MemoPreviewData>) {
+        this.memoPreviewList = list
+        memoListAdapter.setDataList(this.memoPreviewList)
     }
 
     private fun initMemoAdapter() {
@@ -37,11 +50,23 @@ class MainActivity() :
         )
     }
 
+    private fun initSearchLiveData() {
+        binding.etSearchMemo.registerLiveData(searchResultData)
+
+        searchResultData.observe(this) {
+            val searching = it
+            val filtered = memoPreviewList.filter { it ->
+                it.title.startsWith(searching)
+            }
+            memoListAdapter.setDataList(filtered as MutableList<MemoPreviewData>)
+        }
+    }
+
     private fun initDummy() {
-        memoListAdapter.setDataList(
+        setMemoList(
             mutableListOf(
                 MemoPreviewData(
-                    title = "메모 제목",
+                    title = "memo title",
                     date = Date(),
                     content = "1,000,000",
                     suffix = "원",

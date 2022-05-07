@@ -51,4 +51,7 @@ class MemoListAdapter() : RecyclerView.Adapter<MemoListAdapter.MemoHolder>() {
         this.dataList = dataList
         notifyDataSetChanged()
     }
+
+    fun getDataList() = this.dataList
+
 }
