@@ -17,6 +17,7 @@
         android:maxLines="1"
         android:textFontWeight="400"
         android:textSize="12sp"
+        android:hint="@string/search_memo_hint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/iv_search"
         app:layout_constraintStart_toStartOf="parent"
