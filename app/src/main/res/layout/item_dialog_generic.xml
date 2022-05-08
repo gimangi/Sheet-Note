@@ -7,7 +7,7 @@
     <data>
         <variable
             name="dialogText"
-            type="com.gimangi.singleline_note.data.DialogData" />
+            type="com.gimangi.singleline_note.data.model.DialogData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -1,8 +1,9 @@
-package com.gimangi.singleline_note.data
+package com.gimangi.singleline_note.data.model
 
 import java.util.*
 
 data class MemoPreviewData(
+    val memoId: Int,
     val title: String,
     val date: Date,
     val content: String,

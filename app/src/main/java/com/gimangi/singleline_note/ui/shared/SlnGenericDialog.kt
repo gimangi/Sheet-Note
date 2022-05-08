@@ -7,7 +7,7 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import com.gimangi.singleline_note.R
-import com.gimangi.singleline_note.data.DialogData
+import com.gimangi.singleline_note.data.model.DialogData
 import com.gimangi.singleline_note.databinding.ItemDialogGenericBinding
 
 class SlnGenericDialog(private val context: Context) {
