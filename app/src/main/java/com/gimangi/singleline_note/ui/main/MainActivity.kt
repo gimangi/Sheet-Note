@@ -9,6 +9,7 @@ import com.gimangi.singleline_note.adapter.MemoListAdapter
 import com.gimangi.singleline_note.data.model.MemoPreviewData
 import com.gimangi.singleline_note.databinding.ActivityMainBinding
 import com.gimangi.singleline_note.ui.base.BaseActivity
+import com.gimangi.singleline_note.ui.memo.MemoCreateActivity
 import com.gimangi.singleline_note.ui.memo.MemoCreateViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
@@ -30,7 +31,7 @@ class MainActivity() :
         initClickListeners()
 
         /* test */
-        mainViewModel.insertNewMemo("kdfjsdkfj")
+        mainViewModel.insertNewMemo("kdfjsdkfj", "원")
 
         mainViewModel.getMemoData(1).observe(this) {
             Log.d("adsf", it.memoName)
@@ -81,7 +82,7 @@ class MainActivity() :
 
     private fun initClickListeners() {
         binding.ibNewMemo.setOnClickListener {
-            val intent = Intent(this, MemoCreateViewModel::class.java)
+            val intent = Intent(this, MemoCreateActivity::class.java)
             startActivity(intent)
         }
     }

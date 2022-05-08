@@ -8,6 +8,8 @@ import java.util.*
 @Entity(tableName = "memo")
 data class MemoTableEntity(
     var memoName: String,
+    var suffix: String,
+    var status: String,
     var updatedAt: Date,
     val memoList: List<MemoItemEntity>,
 
