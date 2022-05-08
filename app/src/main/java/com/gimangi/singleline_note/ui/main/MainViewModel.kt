@@ -1,4 +1,4 @@
-package com.gimangi.singleline_note.viewmodel
+package com.gimangi.singleline_note.ui.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

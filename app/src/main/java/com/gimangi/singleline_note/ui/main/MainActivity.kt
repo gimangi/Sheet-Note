@@ -1,19 +1,15 @@
 package com.gimangi.singleline_note.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.lifecycle.MutableLiveData
 import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.adapter.MemoListAdapter
-import com.gimangi.singleline_note.data.database.room.MemoDatabase
 import com.gimangi.singleline_note.data.model.MemoPreviewData
 import com.gimangi.singleline_note.databinding.ActivityMainBinding
 import com.gimangi.singleline_note.ui.base.BaseActivity
-import com.gimangi.singleline_note.viewmodel.MainViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.launch
+import com.gimangi.singleline_note.ui.memo.MemoCreateViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -31,6 +27,7 @@ class MainActivity() :
         initMemoAdapter()
         initDummy()
         initSearchLiveData()
+        initClickListeners()
 
         /* test */
         mainViewModel.insertNewMemo("kdfjsdkfj")
@@ -79,6 +76,13 @@ class MainActivity() :
                 it.title.startsWith(searching)
             }
             memoListAdapter.setDataList(filtered as MutableList<MemoPreviewData>)
+        }
+    }
+
+    private fun initClickListeners() {
+        binding.ibNewMemo.setOnClickListener {
+            val intent = Intent(this, MemoCreateViewModel::class.java)
+            startActivity(intent)
         }
     }
 
