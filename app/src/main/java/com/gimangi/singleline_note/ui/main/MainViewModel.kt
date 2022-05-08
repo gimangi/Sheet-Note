@@ -28,10 +28,4 @@ class MainViewModel: ViewModel() {
         return res
     }
 
-    fun insertNewMemo(memoName: String, suffix: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            RoomUtil.insertMemo(memoName, suffix)
-        }
-    }
-
 }

@@ -31,7 +31,7 @@ class MainActivity() :
         initClickListeners()
 
         /* test */
-        mainViewModel.insertNewMemo("kdfjsdkfj", "원")
+        //mainViewModel.insertNewMemo("kdfjsdkfj", "원")
 
         mainViewModel.getMemoData(1).observe(this) {
             Log.d("adsf", it.memoName)

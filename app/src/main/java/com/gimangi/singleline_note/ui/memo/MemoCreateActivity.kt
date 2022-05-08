@@ -40,14 +40,26 @@ class MemoCreateActivity :
         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
         }
         override fun afterTextChanged(p0: Editable?) {
+            // 완료 버튼 활성화/비활성화
+            val title = binding.etNewMemoTitle.editText.text
+            val suffix = binding.etNewMemoSuffix.editText.text
+            memoCreateViewModel.title = title.toString()
+            memoCreateViewModel.suffix = suffix.toString()
             memoCreateViewModel.allTextNotEmpty.set(
-                binding.etNewMemoTitle.editText.text.isNotEmpty() && binding.etNewMemoSuffix.editText.text.isNotEmpty()
+                title.isNotEmpty() && suffix.isNotEmpty()
             )
         }
     }
 
     private fun initClickListener() {
         binding.ibToolbarBack.setOnClickListener {
+            finish()
+        }
+        binding.btnMemoCreate.setOnClickListener {
+            memoCreateViewModel.insertNewMemo(
+                memoName = memoCreateViewModel.title,
+                suffix = memoCreateViewModel.suffix
+            )
             finish()
         }
     }
