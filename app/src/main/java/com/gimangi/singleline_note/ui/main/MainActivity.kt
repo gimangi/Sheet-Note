@@ -23,7 +23,6 @@ class MainActivity() :
     private val mainViewModel: MainViewModel by viewModel()
 
     private lateinit var memoListAdapter: MemoListAdapter
-    private val searchResultData = MutableLiveData<String>()
     private lateinit var memoPreviewList: MutableList<MemoPreviewData>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +31,8 @@ class MainActivity() :
         initMemoAdapter()
         initDummy()
         initSearchLiveData()
+        mainViewModel.getMemoData(0).observe(this) {
+        }
     }
 
     private fun setMemoList(list: MutableList<MemoPreviewData>) {
@@ -56,9 +57,9 @@ class MainActivity() :
     }
 
     private fun initSearchLiveData() {
-        binding.etSearchMemo.registerLiveData(searchResultData)
+        binding.etSearchMemo.registerLiveData(mainViewModel.searchResultData)
 
-        searchResultData.observe(this) {
+        mainViewModel.searchResultData.observe(this) {
             val searching = it
             val filtered = memoPreviewList.filter { it ->
                 it.title.startsWith(searching)
