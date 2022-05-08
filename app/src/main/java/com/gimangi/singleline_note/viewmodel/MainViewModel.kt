@@ -12,12 +12,26 @@ class MainViewModel: ViewModel() {
 
     val searchResultData = MutableLiveData<String>()
 
+    fun getMemoDataList(): MutableLiveData<List<MemoTableEntity>> {
+        val res = MutableLiveData<List<MemoTableEntity>>()
+        CoroutineScope(Dispatchers.IO).launch {
+            res.postValue(RoomUtil.getMemoAll())
+        }
+        return res
+    }
+
     fun getMemoData(memoId: Int): MutableLiveData<MemoTableEntity> {
         val res = MutableLiveData<MemoTableEntity>()
         CoroutineScope(Dispatchers.IO).launch {
             res.postValue(RoomUtil.getMemoById(memoId))
         }
         return res
+    }
+
+    fun insertNewMemo(memoName: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            RoomUtil.insertMemo(memoName)
+        }
     }
 
 }

@@ -11,7 +11,7 @@ import com.gimangi.singleline_note.data.database.dto.MemoTableEntity
 interface MemoDao {
 
     @Query("SELECT * FROM memo")
-    fun getMemoAll(): List<MemoTableEntity>
+    fun getMemoAll(): List<MemoTableEntity>?
 
     @Query("SELECT * FROM memo WHERE memo_id = :memoId")
     fun getMemoById(memoId: Int): MemoTableEntity?

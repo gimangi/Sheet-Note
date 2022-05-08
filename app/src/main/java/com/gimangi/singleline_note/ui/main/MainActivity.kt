@@ -31,8 +31,22 @@ class MainActivity() :
         initMemoAdapter()
         initDummy()
         initSearchLiveData()
-        mainViewModel.getMemoData(0).observe(this) {
+
+        /* test */
+        mainViewModel.insertNewMemo("kdfjsdkfj")
+
+        mainViewModel.getMemoData(1).observe(this) {
+            Log.d("adsf", it.memoName)
         }
+
+        mainViewModel.getMemoDataList().observe(this) {
+            for (d in it) {
+                Log.d("aawww", "${d.memoId} ${d.memoName}")
+            }
+        }
+        //
+
+
     }
 
     private fun setMemoList(list: MutableList<MemoPreviewData>) {
@@ -72,6 +86,7 @@ class MainActivity() :
         setMemoList(
             mutableListOf(
                 MemoPreviewData(
+                    memoId = 1,
                     title = "memo title",
                     date = Date(),
                     content = "1,000,000",
