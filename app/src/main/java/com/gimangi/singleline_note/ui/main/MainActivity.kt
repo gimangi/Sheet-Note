@@ -5,7 +5,7 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.adapter.MemoListAdapter
-import com.gimangi.singleline_note.data.MemoPreviewData
+import com.gimangi.singleline_note.data.model.MemoPreviewData
 import com.gimangi.singleline_note.databinding.ActivityMainBinding
 import com.gimangi.singleline_note.ui.base.BaseActivity
 import com.gimangi.singleline_note.viewmodel.MainViewModel

@@ -1,4 +1,4 @@
-package com.gimangi.singleline_note.data
+package com.gimangi.singleline_note.data.model
 
 data class DialogData(
     val title: String,

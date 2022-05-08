@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.gimangi.singleline_note.data.MemoPreviewData
+import com.gimangi.singleline_note.data.model.MemoPreviewData
 import com.gimangi.singleline_note.databinding.ItemMemoListBinding
 
 class MemoListAdapter() : RecyclerView.Adapter<MemoListAdapter.MemoHolder>() {
