@@ -1,4 +1,4 @@
-package com.gimangi.singleline_note.viewmodel
+package com.gimangi.singleline_note.ui.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,12 +26,6 @@ class MainViewModel: ViewModel() {
             res.postValue(RoomUtil.getMemoById(memoId))
         }
         return res
-    }
-
-    fun insertNewMemo(memoName: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            RoomUtil.insertMemo(memoName)
-        }
     }
 
 }

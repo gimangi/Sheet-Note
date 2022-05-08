@@ -57,7 +57,7 @@ class SlnEditText @JvmOverloads
             if (binding.etInput.text.isNotEmpty())
                 binding.btnClear.visibility = View.VISIBLE
             else
-                binding.btnClear.visibility = View.GONE
+                binding.btnClear.visibility = View.INVISIBLE
         }
 
     }

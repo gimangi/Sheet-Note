@@ -1,5 +1,6 @@
 package com.gimangi.singleline_note.util
 
+import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.data.database.dto.MemoItemEntity
 import com.gimangi.singleline_note.data.database.dto.MemoTableEntity
 import com.gimangi.singleline_note.data.database.room.MemoDatabase
@@ -18,9 +19,11 @@ object RoomUtil {
         return dao.getMemoById(memoId)
     }
 
-    fun insertMemo(memoName: String) {
+    fun insertMemo(memoName: String, suffix: String) {
         val newTable = MemoTableEntity(
             memoName = memoName,
+            suffix = suffix,
+            status = context.getString(R.string.memo_status_items),
             updatedAt = Date(),
             memoList = listOf(
                 MemoItemEntity(
