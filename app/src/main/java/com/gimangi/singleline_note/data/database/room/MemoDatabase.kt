@@ -1,9 +1,8 @@
 package com.gimangi.singleline_note.data.database.room
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
+import com.gimangi.singleline_note.data.database.converter.MemoConverter
 import com.gimangi.singleline_note.data.database.dao.MemoDao
 import com.gimangi.singleline_note.data.database.dto.MemoItemEntity
 import com.gimangi.singleline_note.data.database.dto.MemoTableEntity
@@ -15,6 +14,7 @@ import com.gimangi.singleline_note.data.database.dto.MemoTableEntity
                ],
     version = 1
 )
+@TypeConverters(MemoConverter::class)
 abstract class MemoDatabase : RoomDatabase() {
     abstract fun memoDao(): MemoDao
 

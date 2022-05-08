@@ -13,14 +13,14 @@ interface MemoDao {
     @Query("SELECT * FROM memo")
     fun getMemoAll(): List<MemoTableEntity>
 
+    @Query("SELECT * FROM memo WHERE memo_id = :memoId")
+    fun getMemoById(memoId: Int): MemoTableEntity?
+
     @Insert
     fun insertMemoTable(memoTableEntity: MemoTableEntity)
 
     @Update
     fun updateMemoTable(memoTableEntity: MemoTableEntity)
-
-    @Query("SELECT memoList FROM memo WHERE memo_id = :memoId")
-    fun getMemoItems(memoId: Int): List<MemoItemEntity>
 
     @Insert
     fun insertMemoItem(memoItemEntity: MemoItemEntity)

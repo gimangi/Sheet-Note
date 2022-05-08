@@ -1,14 +1,19 @@
 package com.gimangi.singleline_note.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.adapter.MemoListAdapter
+import com.gimangi.singleline_note.data.database.room.MemoDatabase
 import com.gimangi.singleline_note.data.model.MemoPreviewData
 import com.gimangi.singleline_note.databinding.ActivityMainBinding
 import com.gimangi.singleline_note.ui.base.BaseActivity
 import com.gimangi.singleline_note.viewmodel.MainViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -75,6 +80,8 @@ class MainActivity() :
                 )
             )
         )
+
+
     }
 
 }
