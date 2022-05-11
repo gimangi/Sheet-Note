@@ -28,17 +28,6 @@ class MainActivity() :
         initMemoAdapter()
         initSearchLiveData()
         initClickListeners()
-
-        mainViewModel.getMemoData(1).observe(this) {
-            Log.d("adsf", it.memoName)
-        }
-
-        mainViewModel.getMemoDataList().observe(this) {
-            for (d in it) {
-                Log.d("aawww", "${d.memoId} ${d.memoName}")
-            }
-        }
-        //
     }
 
     override fun onResume() {
@@ -105,6 +94,7 @@ class MainActivity() :
             } else {
                 // TODO 아직 메모가 없습니다 표시
             }
+
         }
     }
 
