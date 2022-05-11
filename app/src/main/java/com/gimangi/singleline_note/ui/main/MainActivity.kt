@@ -84,7 +84,7 @@ class MainActivity() :
                         memoId = entity.memoId,
                         title = entity.memoName,
                         date = entity.updatedAt,
-                        content = "1234",
+                        summary = entity.summary.toString(),
                         status = entity.status,
                         suffix = entity.suffix,
                         selected = false

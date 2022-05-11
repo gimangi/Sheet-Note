@@ -60,7 +60,7 @@
             android:textColor="@color/main_bright"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            mergeContent="@{prevData.content}"
+            mergeContent="@{prevData.summary}"
             mergeSuffix="@{prevData.suffix}"
             tools:text="1,000,000원"/>
 
