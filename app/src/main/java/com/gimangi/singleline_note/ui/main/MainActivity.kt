@@ -26,12 +26,8 @@ class MainActivity() :
         super.onCreate(savedInstanceState)
 
         initMemoAdapter()
-        initDummy()
         initSearchLiveData()
         initClickListeners()
-
-        /* test */
-        //mainViewModel.insertNewMemo("kdfjsdkfj", "원")
 
         mainViewModel.getMemoData(1).observe(this) {
             Log.d("adsf", it.memoName)
@@ -43,8 +39,11 @@ class MainActivity() :
             }
         }
         //
+    }
 
-
+    override fun onResume() {
+        super.onResume()
+        loadMemoList()
     }
 
     private fun setMemoList(list: MutableList<MemoPreviewData>) {
@@ -87,22 +86,26 @@ class MainActivity() :
         }
     }
 
-    private fun initDummy() {
-        setMemoList(
-            mutableListOf(
-                MemoPreviewData(
-                    memoId = 1,
-                    title = "memo title",
-                    date = Date(),
-                    content = "1,000,000",
-                    suffix = "원",
-                    status = "N개 항목",
-                    selected = false
-                )
-            )
-        )
-
-
+    private fun loadMemoList() {
+        mainViewModel.getMemoDataList().observe(this) {
+            if (!it.isNullOrEmpty()) {
+                // updatedAt에 관해 내림차순 정렬
+                val res = it.map { entity ->
+                    MemoPreviewData(
+                        memoId = entity.memoId,
+                        title = entity.memoName,
+                        date = entity.updatedAt,
+                        content = "1234",
+                        status = entity.status,
+                        suffix = entity.suffix,
+                        selected = false
+                    )
+                }.sortedBy { d -> d.date }.reversed()
+                setMemoList(res as MutableList<MemoPreviewData>)
+            } else {
+                // TODO 아직 메모가 없습니다 표시
+            }
+        }
     }
 
 }
