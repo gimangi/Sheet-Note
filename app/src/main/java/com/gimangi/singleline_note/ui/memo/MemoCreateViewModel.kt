@@ -3,6 +3,7 @@ package com.gimangi.singleline_note.ui.memo
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gimangi.singleline_note.data.database.dto.MemoTableEntity
 import com.gimangi.singleline_note.util.RoomUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,4 +19,5 @@ class MemoCreateViewModel : ViewModel() {
             RoomUtil.insertMemo(memoName, suffix)
         }
     }
+
 }

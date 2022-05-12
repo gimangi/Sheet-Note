@@ -6,7 +6,7 @@ data class MemoPreviewData(
     val memoId: Int,
     val title: String,
     val date: Date,
-    val content: String,
+    val summary: String,
     val status: String,
     val suffix: String,
     var selected: Boolean

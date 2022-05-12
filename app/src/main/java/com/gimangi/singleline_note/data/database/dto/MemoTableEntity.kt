@@ -9,6 +9,7 @@ import java.util.*
 data class MemoTableEntity(
     var memoName: String,
     var suffix: String,
+    var summary: Int = 0,
     var status: String,
     var updatedAt: Date,
     val memoList: List<MemoItemEntity>,
