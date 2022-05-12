@@ -4,6 +4,9 @@
     <!-- memo main -->
     <string name="toolbar_title_main">전체 메모</string>
     <string name="search_memo_hint">검색할 내용</string>
+    <string name="memo_edit_cancel">취소</string>
+    <string name="memo_delete_confirm">삭제</string>
+    <string name="memo_edit_guide">삭제할 메모를 선택해주세요</string>
 
     <string name="memo_status_items">항목</string>
 

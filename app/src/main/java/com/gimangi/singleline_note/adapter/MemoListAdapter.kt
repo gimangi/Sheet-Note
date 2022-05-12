@@ -52,6 +52,12 @@ class MemoListAdapter() : RecyclerView.Adapter<MemoListAdapter.MemoHolder>() {
         notifyDataSetChanged()
     }
 
+    fun setSelectAll(value: Boolean) {
+        for (d in dataList) {
+            d.selected.set(value)
+        }
+    }
+
     fun getDataList() = this.dataList
 
 }

@@ -13,8 +13,8 @@ interface MemoDao {
     @Query("SELECT * FROM memo WHERE memo_id = :memoId")
     fun getMemoById(memoId: Int): MemoTableEntity?
 
-    @Delete
-    fun deleteMemoTable(memoTableEntity: MemoTableEntity): Boolean
+    @Query("DELETE FROM memo WHERE memo_id IN (:list)")
+    fun deleteMemoTables(list: List<Int>): Int
 
     @Insert
     fun insertMemoTable(memoTableEntity: MemoTableEntity)

@@ -1,13 +1,14 @@
 package com.gimangi.singleline_note.util
 
 import android.util.Log
+import android.view.View
+import android.view.View.*
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.di.SlnApplication
-import com.gimangi.singleline_note.ui.shared.SearchEditText
 import com.gimangi.singleline_note.ui.shared.SlnEditText
 import java.text.SimpleDateFormat
 import java.util.*
@@ -52,6 +53,23 @@ object BindingAdapter {
     @BindingAdapter("slnEditTextHint")
     fun slnEditTextHint(slnEditText: SlnEditText, hint: String) {
         slnEditText.editText.hint = hint
+    }
+
+    // Button Visibility GONE
+    @JvmStatic
+    @BindingAdapter("setVisible")
+    fun setVisible(view: View, flag: Boolean) {
+        if (flag)
+            view.visibility = VISIBLE
+        else
+            view.visibility = INVISIBLE
+    }
+
+    // Set selected
+    @JvmStatic
+    @BindingAdapter("setSelected")
+    fun setSelected(view: View, value: Boolean) {
+        view.isSelected = value
     }
 
 }

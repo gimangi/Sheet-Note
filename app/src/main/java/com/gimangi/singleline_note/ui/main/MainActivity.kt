@@ -25,6 +25,7 @@ class MainActivity() :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        initBinding()
         initMemoAdapter()
         initSearchLiveData()
         initClickListeners()
@@ -33,6 +34,10 @@ class MainActivity() :
     override fun onResume() {
         super.onResume()
         loadMemoList()
+    }
+
+    private fun initBinding() {
+        binding.viewModel = mainViewModel
     }
 
     private fun setMemoList(list: MutableList<MemoPreviewData>) {
@@ -49,7 +54,16 @@ class MainActivity() :
         memoListAdapter.setItemClickListener(
             object: MemoListAdapter.ItemClickListener {
                 override fun onClick(view: View, position: Int) {
-                    TODO("Not yet implemented")
+                    if (mainViewModel.isEditMode.get() == true) {
+                        // edit mode -> select
+                        memoListAdapter.getDataList()[position].also {
+                            if (it.selected.get() != null)
+                                it.selected.set(!it.selected.get()!!)
+                        }
+                    } else {
+                        // normal mode -> detail view
+
+                    }
                 }
 
             }
@@ -69,33 +83,58 @@ class MainActivity() :
     }
 
     private fun initClickListeners() {
+        // 새로운 메모 생성
         binding.ibNewMemo.setOnClickListener {
             val intent = Intent(this, MemoCreateActivity::class.java)
             startActivity(intent)
+        }
+
+        // 삭제할 메모 선택 (edit mode)
+        binding.ibEditMemoList.setOnClickListener {
+            switchEditMode(true)
+        }
+
+        // 삭제 취소
+        binding.btnEditCancel.setOnClickListener {
+            // 모든 메모 선택 해제
+            memoListAdapter.setSelectAll(false)
+            switchEditMode(false)
+        }
+
+        // 삭제 진행
+        binding.btnDeleteConfirm.setOnClickListener {
+            // 삭제할 메모 리스트
+            val targets = memoListAdapter.getDataList().filter {
+                it.selected.get() == true
+            }.map {
+                it.memoId
+            }
+
+            // DB에 요청
+            mainViewModel.deleteMemoDataList(targets).observe(this) {
+                // 진행 완료
+                memoListAdapter.apply {
+                    // list adapter 에서도 제거
+                    getDataList().removeIf {
+                        it.selected.get() == true
+                    }
+                    notifyDataSetChanged()
+                }
+                switchEditMode(false)
+            }
+
         }
     }
 
     private fun loadMemoList() {
         mainViewModel.getMemoDataList().observe(this) {
-            if (!it.isNullOrEmpty()) {
-                // updatedAt에 관해 내림차순 정렬
-                val res = it.map { entity ->
-                    MemoPreviewData(
-                        memoId = entity.memoId,
-                        title = entity.memoName,
-                        date = entity.updatedAt,
-                        summary = entity.summary.toString(),
-                        status = entity.status,
-                        suffix = entity.suffix,
-                        selected = false
-                    )
-                }.sortedBy { d -> d.date }.reversed()
-                setMemoList(res as MutableList<MemoPreviewData>)
-            } else {
-                // TODO 아직 메모가 없습니다 표시
-            }
-
+            if (!it.isNullOrEmpty())
+                setMemoList(it as MutableList<MemoPreviewData>)
         }
+    }
+
+    private fun switchEditMode(flag: Boolean) {
+        mainViewModel.isEditMode.set(flag)
     }
 
 }

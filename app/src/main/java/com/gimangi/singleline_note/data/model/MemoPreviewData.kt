@@ -1,5 +1,6 @@
 package com.gimangi.singleline_note.data.model
 
+import androidx.databinding.ObservableField
 import java.util.*
 
 data class MemoPreviewData(
@@ -9,5 +10,5 @@ data class MemoPreviewData(
     val summary: String,
     val status: String,
     val suffix: String,
-    var selected: Boolean
+    val selected: ObservableField<Boolean>
 )
