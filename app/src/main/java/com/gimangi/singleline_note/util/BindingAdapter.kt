@@ -40,10 +40,10 @@ object BindingAdapter {
     @BindingAdapter("setButtonEnable", "setButtonDefaultColor")
     fun setButtonEnable(button: Button, value: Boolean, defaultColor: Int) {
         if (value) {
-            button.setTextColor(ContextCompat.getColor(context!!, defaultColor))
+            button.setTextColor(getColor(defaultColor))
             button.isEnabled = true
         } else {
-            button.setTextColor(ContextCompat.getColor(context!!, R.color.gray4))
+            button.setTextColor(getColor(R.color.gray4))
             button.isEnabled = false
         }
     }
@@ -71,5 +71,17 @@ object BindingAdapter {
     fun setSelected(view: View, value: Boolean) {
         view.isSelected = value
     }
+
+    // 짝수 행에 대해서 색상 구분
+    @JvmStatic
+    @BindingAdapter("setEvenRowColor")
+    fun setRowEvenColor(view: View, num: Int) {
+        if (num % 2 == 0)
+            view.setBackgroundResource(getColor(num))
+        else
+            view.setBackgroundResource(getColor(R.color.white))
+    }
+
+    private fun getColor(value: Int) = ContextCompat.getColor(context!!, value)
 
 }
