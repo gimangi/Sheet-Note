@@ -16,5 +16,18 @@ class MemoDetailActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        initBinding()
+        initClickListener()
+    }
+
+    private fun initBinding() {
+
+    }
+
+    private fun initClickListener() {
+        // 뒤로 가기
+        binding.ibToolbarBack.setOnClickListener {
+            finish()
+        }
     }
 }
