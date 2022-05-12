@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 class MainViewModel: ViewModel() {
 
     val isEditMode = ObservableField(false)
+    val selectedMemoExist = ObservableField(false)
     val searchResultData = MutableLiveData<String>()
 
     fun getMemoDataList(): MutableLiveData<List<MemoPreviewData>> {
