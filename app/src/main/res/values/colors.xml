@@ -22,4 +22,6 @@
     <color name="red_light">#FFC6C6</color>
     <color name="background">#DDDDDD</color>
 
+    <color name="detail_background">#e5e5e5</color>
+
 </resources>

@@ -12,6 +12,7 @@ import com.gimangi.singleline_note.databinding.ActivityMainBinding
 import com.gimangi.singleline_note.ui.base.BaseActivity
 import com.gimangi.singleline_note.ui.memo.MemoCreateActivity
 import com.gimangi.singleline_note.ui.memo.MemoCreateViewModel
+import com.gimangi.singleline_note.ui.memo.MemoDetailActivity
 import com.gimangi.singleline_note.ui.shared.SlnGenericDialog
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
@@ -70,7 +71,10 @@ class MainActivity() :
                         }
                     } else {
                         // normal mode -> detail view
-
+                        val intent = Intent(this@MainActivity, MemoDetailActivity::class.java).apply {
+                            putExtra("memoId", memoListAdapter.getDataList()[position].memoId)
+                        }
+                        startActivity(intent)
                     }
                 }
 
