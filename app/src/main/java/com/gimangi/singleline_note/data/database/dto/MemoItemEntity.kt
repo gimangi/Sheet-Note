@@ -20,7 +20,7 @@ import androidx.room.PrimaryKey
 data class MemoItemEntity(
     var order: Int,
     var item: String,
-    var value: Int,
+    var value: Long,
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "memo_item_id")

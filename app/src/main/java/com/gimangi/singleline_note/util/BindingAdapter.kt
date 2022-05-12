@@ -4,7 +4,9 @@ import android.util.Log
 import android.view.View
 import android.view.View.*
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
+import androidx.compose.ui.platform.textInputServiceFactory
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.gimangi.singleline_note.R
@@ -40,10 +42,10 @@ object BindingAdapter {
     @BindingAdapter("setButtonEnable", "setButtonDefaultColor")
     fun setButtonEnable(button: Button, value: Boolean, defaultColor: Int) {
         if (value) {
-            button.setTextColor(ContextCompat.getColor(context!!, defaultColor))
+            button.setTextColor(getColor(defaultColor))
             button.isEnabled = true
         } else {
-            button.setTextColor(ContextCompat.getColor(context!!, R.color.gray4))
+            button.setTextColor(getColor(R.color.gray4))
             button.isEnabled = false
         }
     }
@@ -71,5 +73,42 @@ object BindingAdapter {
     fun setSelected(view: View, value: Boolean) {
         view.isSelected = value
     }
+
+    // int를 TextView에 출력
+    @JvmStatic
+    @BindingAdapter("setTextInt")
+    fun setTextInt(editText: EditText, value: Int) {
+        editText.setText(value.toString())
+    }
+
+    @JvmStatic
+    @BindingAdapter("setTextInt")
+    fun setTextInt(textView: TextView, value: Int) {
+        textView.text = value.toString()
+    }
+
+    @JvmStatic
+    @BindingAdapter("setTextLong")
+    fun setTextLong(textView: TextView, value: Long) {
+        textView.text = value.toString()
+    }
+
+    @JvmStatic
+    @BindingAdapter("setTextLong")
+    fun setTextLong(editText: EditText, value: Long) {
+        editText.setText(value.toString())
+    }
+
+    // 짝수 행에 대해서 색상 구분
+    @JvmStatic
+    @BindingAdapter("setEvenRowColor")
+    fun setRowEvenColor(view: View, num: Int) {
+        if (num % 2 == 0)
+            view.setBackgroundColor(getColor(R.color.even_item))
+        else
+            view.setBackgroundColor(getColor(R.color.white))
+    }
+
+    private fun getColor(value: Int) = ContextCompat.getColor(context!!, value)
 
 }

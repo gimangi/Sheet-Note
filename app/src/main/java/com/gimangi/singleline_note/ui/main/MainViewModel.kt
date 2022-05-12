@@ -42,13 +42,6 @@ class MainViewModel: ViewModel() {
         return res
     }
 
-    fun getMemoData(memoId: Int): MutableLiveData<MemoTableEntity> {
-        val res = MutableLiveData<MemoTableEntity>()
-        CoroutineScope(Dispatchers.IO).launch {
-            res.postValue(RoomUtil.getMemoById(memoId))
-        }
-        return res
-    }
 
     fun deleteMemoDataList(list: List<Int>): MutableLiveData<Int> {
         val res = MutableLiveData<Int>()

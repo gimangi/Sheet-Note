@@ -21,5 +21,8 @@
     <color name="red">#FF0000</color>
     <color name="red_light">#FFC6C6</color>
     <color name="background">#DDDDDD</color>
+    <color name="even_item">#EEFCFF</color>
+
+    <color name="detail_background">#e5e5e5</color>
 
 </resources>
