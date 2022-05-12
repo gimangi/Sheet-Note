@@ -6,11 +6,13 @@ import android.util.Log
 import android.view.View
 import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.adapter.MemoListAdapter
+import com.gimangi.singleline_note.data.model.DialogData
 import com.gimangi.singleline_note.data.model.MemoPreviewData
 import com.gimangi.singleline_note.databinding.ActivityMainBinding
 import com.gimangi.singleline_note.ui.base.BaseActivity
 import com.gimangi.singleline_note.ui.memo.MemoCreateActivity
 import com.gimangi.singleline_note.ui.memo.MemoCreateViewModel
+import com.gimangi.singleline_note.ui.shared.SlnGenericDialog
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -57,8 +59,14 @@ class MainActivity() :
                     if (mainViewModel.isEditMode.get() == true) {
                         // edit mode -> select
                         memoListAdapter.getDataList()[position].also {
-                            if (it.selected.get() != null)
-                                it.selected.set(!it.selected.get()!!)
+                            val selected = it.selected.get() ?: false
+                            it.selected.set(!selected)  // selected 토글
+
+                            // 선택된 메모가 존재하는지 파악 (버튼 비활성화)
+                            if (memoListAdapter.getNumSelected() > 0)
+                                mainViewModel.selectedMemoExist.set(true)
+                            else
+                                mainViewModel.selectedMemoExist.set(false)
                         }
                     } else {
                         // normal mode -> detail view
@@ -103,26 +111,45 @@ class MainActivity() :
 
         // 삭제 진행
         binding.btnDeleteConfirm.setOnClickListener {
-            // 삭제할 메모 리스트
-            val targets = memoListAdapter.getDataList().filter {
-                it.selected.get() == true
-            }.map {
-                it.memoId
-            }
 
-            // DB에 요청
-            mainViewModel.deleteMemoDataList(targets).observe(this) {
-                // 진행 완료
-                memoListAdapter.apply {
-                    // list adapter 에서도 제거
-                    getDataList().removeIf {
-                        it.selected.get() == true
-                    }
-                    notifyDataSetChanged()
+            // 삭제 확인 다이얼로그
+            SlnGenericDialog(this).show(
+                DialogData(
+                    title = getString(R.string.dialog_memo_delete_title),
+                    cancel = getString(R.string.dialog_memo_delete_cancel),
+                    confirm = getString(R.string.dialog_memo_delete_confirm)
+                    ),
+                onConfirm = {
+                    deleteSelectedMemo()
+                },
+                onCancel = {
                 }
-                switchEditMode(false)
-            }
+            )
 
+
+        }
+    }
+
+    private fun deleteSelectedMemo() {
+
+        // 삭제할 메모 리스트
+        val targets = memoListAdapter.getDataList().filter {
+            it.selected.get() == true
+        }.map {
+            it.memoId
+        }
+
+        // DB에 요청
+        mainViewModel.deleteMemoDataList(targets).observe(this) {
+            // 진행 완료
+            memoListAdapter.apply {
+                // list adapter 에서도 제거
+                getDataList().removeIf {
+                    it.selected.get() == true
+                }
+                notifyDataSetChanged()
+            }
+            switchEditMode(false)
         }
     }
 

@@ -58,6 +58,12 @@ class MemoListAdapter() : RecyclerView.Adapter<MemoListAdapter.MemoHolder>() {
         }
     }
 
+    fun getNumSelected(): Int {
+        return dataList.filter {
+            it.selected.get() == true
+        }.size
+    }
+
     fun getDataList() = this.dataList
 
 }

@@ -37,10 +37,10 @@ object BindingAdapter {
 
     // 완료 버튼 색상 및 enable 결정
     @JvmStatic
-    @BindingAdapter("setButtonEnable")
-    fun setButtonEnable(button: Button, value: Boolean) {
+    @BindingAdapter("setButtonEnable", "setButtonDefaultColor")
+    fun setButtonEnable(button: Button, value: Boolean, defaultColor: Int) {
         if (value) {
-            button.setTextColor(ContextCompat.getColor(context!!, R.color.white))
+            button.setTextColor(ContextCompat.getColor(context!!, defaultColor))
             button.isEnabled = true
         } else {
             button.setTextColor(ContextCompat.getColor(context!!, R.color.gray4))
