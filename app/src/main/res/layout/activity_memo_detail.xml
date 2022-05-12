@@ -41,7 +41,7 @@
                 android:layout_marginStart="14dp"
                 android:fontFamily="@font/noto_sans_kr"
                 android:includeFontPadding="false"
-                android:text="@{viewModel.memoName}"
+                android:text="@{viewModel.memoTableName}"
                 android:textColor="@color/white"
                 android:textFontWeight="500"
                 android:textSize="16sp"
