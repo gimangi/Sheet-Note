@@ -16,5 +16,5 @@ data class MemoTableEntity(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "memo_id")
-    var memoId: Int = 0
+    val memoId: Int = 0
 )

@@ -28,4 +28,12 @@ class MainViewModel: ViewModel() {
         return res
     }
 
+    fun deleteMemoData(memoId: Int): MutableLiveData<Boolean> {
+        val res = MutableLiveData(false)
+        CoroutineScope(Dispatchers.IO).launch {
+            res.postValue(RoomUtil.deleteMemo(memoId))
+        }
+        return res
+    }
+
 }

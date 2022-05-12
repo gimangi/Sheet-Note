@@ -1,9 +1,6 @@
 package com.gimangi.singleline_note.data.database.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.gimangi.singleline_note.data.database.dto.MemoItemEntity
 import com.gimangi.singleline_note.data.database.dto.MemoTableEntity
 
@@ -15,6 +12,9 @@ interface MemoDao {
 
     @Query("SELECT * FROM memo WHERE memo_id = :memoId")
     fun getMemoById(memoId: Int): MemoTableEntity?
+
+    @Delete
+    fun deleteMemoTable(memoTableEntity: MemoTableEntity): Boolean
 
     @Insert
     fun insertMemoTable(memoTableEntity: MemoTableEntity)
