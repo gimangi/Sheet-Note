@@ -41,4 +41,7 @@ object RoomUtil {
         dao.updateMemoTable(tableEntity)
     }
 
+    fun deleteMemoList(list: List<Int>) = dao.deleteMemoTables(list)
+
+    private fun getDummyMemo(memoId: Int) = MemoTableEntity("", "", 0, "", Date(), listOf(), memoId)
 }
