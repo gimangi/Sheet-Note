@@ -12,7 +12,7 @@ data class MemoTableEntity(
     var summary: Long = 0,
     var status: String,
     var updatedAt: Date,
-    val memoList: List<MemoItemEntity>,
+    val memoList: MutableList<MemoItemEntity>,
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "memo_id")

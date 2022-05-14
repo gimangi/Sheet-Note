@@ -4,6 +4,7 @@ import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.data.database.dto.MemoItemEntity
 import com.gimangi.singleline_note.data.database.dto.MemoTableEntity
 import com.gimangi.singleline_note.data.database.room.MemoDatabase
+import com.gimangi.singleline_note.data.model.MemoItemData
 import com.gimangi.singleline_note.di.SlnApplication
 import java.util.*
 
@@ -25,7 +26,7 @@ object RoomUtil {
             suffix = suffix,
             status = context.getString(R.string.memo_status_items),
             updatedAt = Date(),
-            memoList = listOf(
+            memoList = mutableListOf(
                 MemoItemEntity(
                     order = 1,
                     item = "",
@@ -36,6 +37,10 @@ object RoomUtil {
         dao.insertMemoTable(newTable)
     }
 
+    fun insertMemoItem(table: MemoTableEntity, item: MemoItemEntity) {
+        dao.addMemoItem(table, item)
+    }
+
     fun updateMemo(tableEntity: MemoTableEntity) {
         tableEntity.updatedAt = Date()
         dao.updateMemoTable(tableEntity)
@@ -43,5 +48,5 @@ object RoomUtil {
 
     fun deleteMemoList(list: List<Int>) = dao.deleteMemoTables(list)
 
-    private fun getDummyMemo(memoId: Int) = MemoTableEntity("", "", 0, "", Date(), listOf(), memoId)
+    private fun getDummyMemo(memoId: Int) = MemoTableEntity("", "", 0, "", Date(), mutableListOf(), memoId)
 }

@@ -3,6 +3,7 @@ package com.gimangi.singleline_note.ui.memo
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gimangi.singleline_note.data.database.dto.MemoItemEntity
 import com.gimangi.singleline_note.data.database.dto.MemoTableEntity
 import com.gimangi.singleline_note.data.model.MemoItemData
 import com.gimangi.singleline_note.util.RoomUtil
@@ -27,6 +28,17 @@ class MemoDetailViewModel : ViewModel() {
             res.postValue(RoomUtil.getMemoById(memoId))
         }
         return res
+    }
+
+    fun insertMemoItem(table: MemoTableEntity, item: MemoItemData) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val newItem = MemoItemEntity(
+                order = item.number,
+                item = item.name,
+                value = item.value
+            )
+            RoomUtil.insertMemoItem(table, newItem)
+        }
     }
 
 }
