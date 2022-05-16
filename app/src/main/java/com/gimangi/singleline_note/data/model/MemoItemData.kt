@@ -4,5 +4,6 @@ data class MemoItemData(
     val number: Int,
     val name: String,
     val value: Long,
-    val itemId: Int
+    val itemId: Int,
+    val tableId: Int
 )

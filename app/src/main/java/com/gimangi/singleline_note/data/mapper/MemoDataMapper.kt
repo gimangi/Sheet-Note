@@ -10,7 +10,8 @@ object MemoDataMapper {
             order = memoData.number,
             item = memoData.name,
             value = memoData.value,
-            itemId = memoData.itemId
+            itemId = memoData.itemId,
+            tableId = memoData.tableId
         )
     }
 
@@ -19,7 +20,8 @@ object MemoDataMapper {
             number = memoEntity.order,
             name = memoEntity.item,
             value = memoEntity.value,
-            itemId = memoEntity.itemId
+            itemId = memoEntity.itemId,
+            tableId = memoEntity.tableId
         )
     }
 }

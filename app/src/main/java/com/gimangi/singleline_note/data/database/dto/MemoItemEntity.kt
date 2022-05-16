@@ -18,11 +18,14 @@ import androidx.room.PrimaryKey
     ]
 )
 data class MemoItemEntity(
-    var order: Int,
-    var item: String,
-    var value: Long,
+    val order: Int,
+    val item: String,
+    val value: Long,
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "memo_item_id")
-    var itemId: Int = 0
+    val itemId: Int = 0,
+
+    @ColumnInfo(name = "memo_id")
+    val tableId: Int
 )

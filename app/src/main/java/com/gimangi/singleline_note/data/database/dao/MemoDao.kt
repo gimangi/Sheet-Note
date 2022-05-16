@@ -10,36 +10,37 @@ import java.util.*
 abstract class MemoDao {
 
     @Query("SELECT * FROM memo")
-    abstract fun getMemoAll(): List<MemoTableEntity>?
+    abstract suspend fun getMemoAll(): List<MemoTableEntity>?
 
     @Query("SELECT * FROM memo WHERE memo_id = :memoId")
-    abstract fun getMemoById(memoId: Int): MemoTableEntity?
+    abstract suspend fun getMemoById(memoId: Int): MemoTableEntity?
 
     @Query("DELETE FROM memo WHERE memo_id IN (:list)")
-    abstract fun deleteMemoTables(list: List<Int>): Int
+    abstract suspend fun deleteMemoTables(list: List<Int>): Int
 
     @Insert
-    abstract fun insertMemoTable(memoTableEntity: MemoTableEntity)
+    abstract suspend fun insertMemoTable(memoTableEntity: MemoTableEntity)
 
-    @Update
-    abstract fun updateMemoTable(memoTableEntity: MemoTableEntity)
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    abstract suspend fun updateMemoTable(memoTableEntity: MemoTableEntity): Int
 
     @Transaction
-    open fun addMemoItem(memoTableEntity: MemoTableEntity, memoItemEntity: MemoItemEntity) {
-        insertMemoItem(memoItemEntity)
+    open suspend fun addMemoItem(memoTableEntity: MemoTableEntity, memoItemEntity: MemoItemEntity): MemoTableEntity {
         updateMemoTable(
             memoTableEntity.apply {
                 updatedAt = Date()
-                memoList.add(memoItemEntity)
+                rowList.add(memoItemEntity)
             }
         )
+        //insertMemoItem(memoItemEntity)
+        return memoTableEntity
     }
 
     @Insert
-    abstract fun insertMemoItem(memoItemEntity: MemoItemEntity)
+    abstract suspend fun insertMemoItem(memoItemEntity: MemoItemEntity)
 
     @Update
-    abstract fun updateMemoItem(memoItemEntity: MemoItemEntity)
+    abstract suspend fun updateMemoItem(memoItemEntity: MemoItemEntity)
 
 
 }

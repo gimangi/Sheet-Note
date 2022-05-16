@@ -30,15 +30,12 @@ class MemoDetailViewModel : ViewModel() {
         return res
     }
 
-    fun insertMemoItem(table: MemoTableEntity, item: MemoItemData) {
+    fun insertMemoItem(table: MemoTableEntity, item: MemoItemEntity): MutableLiveData<MemoTableEntity> {
+        val res = MutableLiveData<MemoTableEntity>()
         CoroutineScope(Dispatchers.IO).launch {
-            val newItem = MemoItemEntity(
-                order = item.number,
-                item = item.name,
-                value = item.value
-            )
-            RoomUtil.insertMemoItem(table, newItem)
+            res.postValue(RoomUtil.insertMemoItem(table, item))
         }
+        return res
     }
 
 }
