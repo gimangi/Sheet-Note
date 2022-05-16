@@ -75,7 +75,7 @@ class MemoDetailActivity :
         memoItemListAdapter.changedData.observe(this) {
             val tableEntity = memoDetailViewModel.memoTableData.value
             if (it != null && tableEntity != null) {
-                memoDetailViewModel.insertMemoItem(tableEntity, it)
+                //memoDetailViewModel.insertMemoItem(tableEntity, it)
             }
         }
     }
