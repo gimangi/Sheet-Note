@@ -3,6 +3,7 @@ package com.gimangi.singleline_note.adapter
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,8 +35,11 @@ class MemoItemListAdapter() : RecyclerView.Adapter<MemoItemListAdapter.MemoItemH
                     if (!b) {
 
                         val newName = binding.etMemoItemName.text.toString()
-                        val newValue = binding.etMemoItemValue.text.toString().replace(",", "")
-                            .toLong()
+                        val valueStr = binding.etMemoItemValue.text.toString().replace(",", "")
+                        var newValue = 0L
+                        if (valueStr.isNotEmpty()) {
+                            newValue = valueStr.toLong()
+                        }
 
                         // observer 에게 알림
                         _changedData.value = MemoItemData(
@@ -53,13 +57,13 @@ class MemoItemListAdapter() : RecyclerView.Adapter<MemoItemListAdapter.MemoItemH
                             it.name = newName
                             it.value = newValue
                         }
-                        //notifyDataSetChanged()
 
                     }
                 }
 
             binding.etMemoItemName.onFocusChangeListener = autoSaveListener
             binding.etMemoItemValue.onFocusChangeListener = autoSaveListener
+
         }
     }
 
@@ -70,7 +74,7 @@ class MemoItemListAdapter() : RecyclerView.Adapter<MemoItemListAdapter.MemoItemH
         )
 
         binding.etMemoItemValue.apply {
-            addTextChangedListener(CommaTextWatcher(this))
+            addTextChangedListener(CommaTextWithLimitWatcher(this))
         }
 
         return MemoItemHolder(binding, parent.context)
@@ -89,7 +93,7 @@ class MemoItemListAdapter() : RecyclerView.Adapter<MemoItemListAdapter.MemoItemH
         notifyDataSetChanged()
     }
 
-    inner class CommaTextWatcher(val editText: EditText) : TextWatcher {
+    inner class CommaTextWithLimitWatcher(val editText: EditText) : TextWatcher {
         var before = ""
 
         override fun beforeTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -98,14 +102,22 @@ class MemoItemListAdapter() : RecyclerView.Adapter<MemoItemListAdapter.MemoItemH
 
         override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
             if (!s.isNullOrEmpty() && s.toString() != before) {
-                val strNumber = s.toString().replace(",","").toDoubleOrNull() ?: 0
-                editText.setText(DecimalFormat("#,###").format(strNumber))
+                val strValue = s.toString().replace(",","")
+                if (strValue.length > 18) {
+                    editText.setText(before)
+                } else {
+                    val strNumber = strValue.toDoubleOrNull() ?: 0
+                    editText.setText(DecimalFormat("#,###").format(strNumber))
+                }
+
             }
         }
 
         override fun afterTextChanged(s: Editable?) {
+            editText.setSelection(editText.text.length)
         }
 
     }
+
 
 }
