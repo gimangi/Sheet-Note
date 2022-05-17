@@ -64,6 +64,11 @@ class MemoListAdapter() : RecyclerView.Adapter<MemoListAdapter.MemoHolder>() {
         }.size
     }
 
+    fun deleteDataCollection(list: Collection<MemoPreviewData>) {
+        this.dataList.removeAll(list)
+        notifyDataSetChanged()
+    }
+
     fun getDataList() = this.dataList
 
 }
