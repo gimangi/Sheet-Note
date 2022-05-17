@@ -32,7 +32,6 @@ abstract class MemoDao {
                 rowList.add(memoItemEntity)
             }
         )
-        //insertMemoItem(memoItemEntity)
         return memoTableEntity
     }
 

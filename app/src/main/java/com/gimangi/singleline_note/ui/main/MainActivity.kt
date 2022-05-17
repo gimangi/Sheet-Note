@@ -23,7 +23,6 @@ class MainActivity() :
     private val mainViewModel: MainViewModel by viewModel()
 
     private lateinit var memoListAdapter: MemoListAdapter
-    private lateinit var memoPreviewList: MutableList<MemoPreviewData>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,11 +40,6 @@ class MainActivity() :
 
     private fun initBinding() {
         binding.viewModel = mainViewModel
-    }
-
-    private fun setMemoList(list: MutableList<MemoPreviewData>) {
-        this.memoPreviewList = list
-        memoListAdapter.setDataList(this.memoPreviewList)
     }
 
     private fun initMemoAdapter() {
@@ -87,7 +81,7 @@ class MainActivity() :
 
         mainViewModel.searchResultData.observe(this) {
             val searching = it
-            val filtered = memoPreviewList.filter { it ->
+            val filtered = memoListAdapter.getDataList().filter { it ->
                 it.title.startsWith(searching)
             }
             memoListAdapter.setDataList(filtered as MutableList<MemoPreviewData>)
@@ -160,7 +154,7 @@ class MainActivity() :
     private fun loadMemoList() {
         mainViewModel.getMemoDataList().observe(this) {
             if (!it.isNullOrEmpty())
-                setMemoList(it as MutableList<MemoPreviewData>)
+                memoListAdapter.setDataList(it as MutableList<MemoPreviewData>)
         }
     }
 
