@@ -1,6 +1,7 @@
 package com.gimangi.singleline_note.data.database.dto
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.*
@@ -12,7 +13,7 @@ data class MemoTableEntity(
     var summary: Long = 0,
     var status: String,
     var updatedAt: Date,
-    val memoList: List<MemoItemEntity>,
+    val rowList: MutableList<MemoItemEntity>,
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "memo_id")

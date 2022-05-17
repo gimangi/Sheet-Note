@@ -8,6 +8,8 @@ import android.widget.EditText
 import android.widget.TextView
 import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.adapter.MemoItemListAdapter
+import com.gimangi.singleline_note.data.database.dto.MemoItemEntity
+import com.gimangi.singleline_note.data.mapper.MemoDataMapper
 import com.gimangi.singleline_note.data.model.MemoItemData
 import com.gimangi.singleline_note.databinding.ActivityMemoDetailBinding
 import com.gimangi.singleline_note.ui.base.BaseActivity
@@ -48,16 +50,15 @@ class MemoDetailActivity :
                 memoDetailViewModel.suffix.set(it.suffix)
 
                 // 리사이클러뷰 데이터 갱신
-                val list = it.memoList.map { entity ->
-                    MemoItemData(
-                        number = entity.order,
-                        name = entity.item,
-                        value = entity.value,
-                        itemId = entity.itemId
-                    )
+
+
+                val list = it.rowList.map { entity ->
+                    MemoDataMapper.getMemoItemData(entity)
                 } as MutableList<MemoItemData>
 
                 memoItemListAdapter.setDataList(list)
+
+
             }
         }
     }
@@ -74,12 +75,39 @@ class MemoDetailActivity :
     private fun initMemoListAdapter() {
         memoItemListAdapter = MemoItemListAdapter()
         binding.rvMemoItemList.adapter = memoItemListAdapter
+
+        // focus 해제된 item -> 자동저장
+        memoItemListAdapter.changedData.observe(this) {
+            val tableEntity = memoDetailViewModel.memoTableData.value
+            if (it != null && tableEntity != null) {
+                //memoDetailViewModel.insertMemoItem(tableEntity, it)
+            }
+        }
     }
 
     private fun initClickListener() {
         // 뒤로 가기
         binding.ibToolbarBack.setOnClickListener {
             finish()
+        }
+
+        // 행 추가
+        binding.clAddRow.setOnClickListener {
+            val table = memoDetailViewModel.memoTableData.value
+
+            if (table != null) {
+                val newRow = MemoItemEntity(
+                    order = 1,
+                    item = "",
+                    value = 0,
+                    tableId = table.memoId
+                )
+
+                memoDetailViewModel.insertMemoItem(table, newRow).observe(this) {
+                    if (it != null)
+                        memoDetailViewModel.memoTableData.value = it
+                }
+            }
         }
     }
 

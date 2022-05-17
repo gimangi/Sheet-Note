@@ -4,9 +4,11 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.TextView
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.gimangi.singleline_note.data.model.MemoItemData
 import com.gimangi.singleline_note.databinding.ItemMemoItemsListBinding
@@ -15,10 +17,22 @@ import java.text.DecimalFormat
 class MemoItemListAdapter() : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHolder>() {
     private var dataList = mutableListOf<MemoItemData>()
 
-    class MemoItemHolder(private val binding: ItemMemoItemsListBinding, private val context: Context) : RecyclerView.ViewHolder(binding.root) {
+    // 변경된 아이템 자동저장을 위한 Observable
+    private val _changedData = MutableLiveData<MemoItemData>()
+    val changedData : LiveData<MemoItemData>
+        get() = _changedData
+
+    inner class MemoItemHolder(private val binding: ItemMemoItemsListBinding, private val context: Context) : RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(data: MemoItemData) {
             binding.item = data
+
+            // focus 해제 시 자동 저장
+            val autoSaveListener =
+                View.OnFocusChangeListener { _, _ -> _changedData.value = data }
+
+            binding.etMemoItemName.onFocusChangeListener = autoSaveListener
+            binding.etMemoItemValue.onFocusChangeListener = autoSaveListener
         }
     }
 

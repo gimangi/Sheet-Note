@@ -1,32 +1,45 @@
 package com.gimangi.singleline_note.data.database.dao
 
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.room.*
 import com.gimangi.singleline_note.data.database.dto.MemoItemEntity
 import com.gimangi.singleline_note.data.database.dto.MemoTableEntity
+import java.util.*
 
 @Dao
-interface MemoDao {
+abstract class MemoDao {
 
     @Query("SELECT * FROM memo")
-    fun getMemoAll(): List<MemoTableEntity>?
+    abstract suspend fun getMemoAll(): List<MemoTableEntity>?
 
     @Query("SELECT * FROM memo WHERE memo_id = :memoId")
-    fun getMemoById(memoId: Int): MemoTableEntity?
+    abstract suspend fun getMemoById(memoId: Int): MemoTableEntity?
 
     @Query("DELETE FROM memo WHERE memo_id IN (:list)")
-    fun deleteMemoTables(list: List<Int>): Int
+    abstract suspend fun deleteMemoTables(list: List<Int>): Int
 
     @Insert
-    fun insertMemoTable(memoTableEntity: MemoTableEntity)
+    abstract suspend fun insertMemoTable(memoTableEntity: MemoTableEntity)
 
-    @Update
-    fun updateMemoTable(memoTableEntity: MemoTableEntity)
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    abstract suspend fun updateMemoTable(memoTableEntity: MemoTableEntity): Int
+
+    @Transaction
+    open suspend fun addMemoItem(memoTableEntity: MemoTableEntity, memoItemEntity: MemoItemEntity): MemoTableEntity {
+        updateMemoTable(
+            memoTableEntity.apply {
+                updatedAt = Date()
+                rowList.add(memoItemEntity)
+            }
+        )
+        return memoTableEntity
+    }
 
     @Insert
-    fun insertMemoItem(memoItemEntity: MemoItemEntity)
+    abstract suspend fun insertMemoItem(memoItemEntity: MemoItemEntity)
 
     @Update
-    fun updateMemoItem(memoItemEntity: MemoItemEntity)
+    abstract suspend fun updateMemoItem(memoItemEntity: MemoItemEntity)
 
 
 }
