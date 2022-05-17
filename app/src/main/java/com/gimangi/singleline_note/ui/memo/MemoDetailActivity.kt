@@ -34,6 +34,12 @@ class MemoDetailActivity :
         setCommaNumberText()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // 액티비티 종료 등의 변화에도 자동 저장 지원
+        
+    }
+
     private fun initBinding() {
         binding.viewModel = memoDetailViewModel
     }
@@ -78,10 +84,7 @@ class MemoDetailActivity :
 
         // focus 해제된 item -> 자동저장
         memoItemListAdapter.changedData.observe(this) {
-            val tableEntity = memoDetailViewModel.memoTableData.value
-            if (it != null && tableEntity != null) {
-                //memoDetailViewModel.insertMemoItem(tableEntity, it)
-            }
+            autoSaveRow(it)
         }
     }
 
@@ -97,7 +100,7 @@ class MemoDetailActivity :
 
             if (table != null) {
                 val newRow = MemoItemEntity(
-                    order = 1,
+                    order = table.rowList.size + 1,
                     item = "",
                     value = 0,
                     tableId = table.memoId
@@ -114,6 +117,21 @@ class MemoDetailActivity :
     private fun setCommaNumberText() {
         binding.tvSummaryValue.apply {
             addTextChangedListener(CommaTextWatcher(this))
+        }
+    }
+
+    private fun autoSaveRow(data: MemoItemData?) {
+        val tableEntity = memoDetailViewModel.memoTableData.value
+        if (data != null && tableEntity != null) {
+
+            tableEntity.rowList.filter {
+                it.order == data.number
+            }.forEach {
+                it.item = data.name
+                it.value = data.value
+            }
+
+            memoDetailViewModel.updateMemoTable(tableEntity)
         }
     }
 

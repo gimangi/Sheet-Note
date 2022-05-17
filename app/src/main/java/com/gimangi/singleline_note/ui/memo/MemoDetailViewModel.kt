@@ -38,4 +38,10 @@ class MemoDetailViewModel : ViewModel() {
         return res
     }
 
+    fun updateMemoTable(table: MemoTableEntity) {
+        CoroutineScope(Dispatchers.IO).launch {
+            RoomUtil.updateMemo(table)
+        }
+    }
+
 }
