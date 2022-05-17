@@ -22,6 +22,7 @@ class MainActivity() :
     private val mainViewModel: MainViewModel by viewModel()
 
     private lateinit var memoListAdapter: MemoListAdapter
+    private var memoPreviewList = mutableListOf<MemoPreviewData>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,7 +81,7 @@ class MainActivity() :
 
         mainViewModel.searchResultData.observe(this) {
             val searching = it
-            val filtered = memoListAdapter.getDataList().filter { it ->
+            val filtered = memoPreviewList.filter { it ->
                 it.title.startsWith(searching)
             }
             memoListAdapter.setDataList(filtered.toMutableList())
@@ -138,20 +139,12 @@ class MainActivity() :
 
         // DB에 요청
         mainViewModel.deleteMemoDataList(targets).observe(this) {
-            Log.d("asdfds list : ", memoListAdapter.getDataList().toString())
-            Log.d("asdfe selected : ", memoListAdapter.getDataList().filter {it.selected.get()==true}.toString())
-
-            // 진행 완료
-
-            memoListAdapter.apply {
-                // list adapter 에서도 제거
-
-                getDataList().removeAll { data ->
-                    data.selected.get() == true
-                }
-
-                notifyDataSetChanged()
+            // 진행 완료 -> 전체 리스트에서 제거
+            val deletedList = memoListAdapter.getDataList().filter {
+                it.selected.get() == true
             }
+            memoPreviewList.removeAll(deletedList)
+            memoListAdapter.deleteDataCollection(deletedList)
 
             switchEditMode(false)
         }
@@ -159,8 +152,10 @@ class MainActivity() :
 
     private fun loadMemoList() {
         mainViewModel.getMemoDataList().observe(this) {
-            if (!it.isNullOrEmpty())
+            if (!it.isNullOrEmpty()) {
+                memoPreviewList = it.toMutableList()
                 memoListAdapter.setDataList(it.toMutableList())
+            }
         }
     }
 
