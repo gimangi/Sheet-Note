@@ -11,7 +11,6 @@ import com.gimangi.singleline_note.data.model.MemoPreviewData
 import com.gimangi.singleline_note.databinding.ActivityMainBinding
 import com.gimangi.singleline_note.ui.base.BaseActivity
 import com.gimangi.singleline_note.ui.memo.MemoCreateActivity
-import com.gimangi.singleline_note.ui.memo.MemoCreateViewModel
 import com.gimangi.singleline_note.ui.memo.MemoDetailActivity
 import com.gimangi.singleline_note.ui.shared.SlnGenericDialog
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -84,7 +83,7 @@ class MainActivity() :
             val filtered = memoListAdapter.getDataList().filter { it ->
                 it.title.startsWith(searching)
             }
-            memoListAdapter.setDataList(filtered as MutableList<MemoPreviewData>)
+            memoListAdapter.setDataList(filtered.toMutableList())
         }
     }
 
@@ -139,14 +138,21 @@ class MainActivity() :
 
         // DB에 요청
         mainViewModel.deleteMemoDataList(targets).observe(this) {
+            Log.d("asdfds list : ", memoListAdapter.getDataList().toString())
+            Log.d("asdfe selected : ", memoListAdapter.getDataList().filter {it.selected.get()==true}.toString())
+
             // 진행 완료
+
             memoListAdapter.apply {
                 // list adapter 에서도 제거
-                getDataList().removeIf {
-                    it.selected.get() == true
+
+                getDataList().removeAll { data ->
+                    data.selected.get() == true
                 }
+
                 notifyDataSetChanged()
             }
+
             switchEditMode(false)
         }
     }
@@ -154,7 +160,7 @@ class MainActivity() :
     private fun loadMemoList() {
         mainViewModel.getMemoDataList().observe(this) {
             if (!it.isNullOrEmpty())
-                memoListAdapter.setDataList(it as MutableList<MemoPreviewData>)
+                memoListAdapter.setDataList(it.toMutableList())
         }
     }
 
