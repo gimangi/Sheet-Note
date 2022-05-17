@@ -34,10 +34,10 @@ class MemoDetailActivity :
         setCommaNumberText()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        // 액티비티 종료 등의 변화에도 자동 저장 지원
-        
+    override fun onPause() {
+        super.onPause()
+        // focus를 잃도록 -> 자동저장
+        currentFocus?.clearFocus()
     }
 
     private fun initBinding() {
