@@ -2,8 +2,8 @@ package com.gimangi.singleline_note.data.model
 
 data class MemoItemData(
     val number: Int,
-    val name: String,
-    val value: Long,
+    var name: String,
+    var value: Long,
     val itemId: Int,
     val tableId: Int
 )

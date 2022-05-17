@@ -29,7 +29,34 @@ class MemoItemListAdapter() : RecyclerView.Adapter<MemoItemListAdapter.MemoItemH
 
             // focus 해제 시 자동 저장
             val autoSaveListener =
-                View.OnFocusChangeListener { _, _ -> _changedData.value = data }
+                View.OnFocusChangeListener { _, b ->
+                    /// focus 해제
+                    if (!b) {
+
+                        val newName = binding.etMemoItemName.text.toString()
+                        val newValue = binding.etMemoItemValue.text.toString().replace(",", "")
+                            .toLong()
+
+                        // observer 에게 알림
+                        _changedData.value = MemoItemData(
+                            number = data.number,
+                            name = newName,
+                            value = newValue,
+                            itemId = data.itemId,
+                            tableId = data.tableId
+                        )
+
+                        // data list 수정
+                        dataList.filter {
+                            it.number == data.number
+                        }.forEach {
+                            it.name = newName
+                            it.value = newValue
+                        }
+                        //notifyDataSetChanged()
+
+                    }
+                }
 
             binding.etMemoItemName.onFocusChangeListener = autoSaveListener
             binding.etMemoItemValue.onFocusChangeListener = autoSaveListener
