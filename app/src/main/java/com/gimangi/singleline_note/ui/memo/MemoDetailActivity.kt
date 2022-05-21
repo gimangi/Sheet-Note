@@ -9,6 +9,8 @@ import android.widget.TextView
 import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.adapter.MemoItemListAdapter
 import com.gimangi.singleline_note.data.database.dto.MemoItemEntity
+import com.gimangi.singleline_note.data.database.dto.MemoStatus
+import com.gimangi.singleline_note.data.database.dto.getStatusString
 import com.gimangi.singleline_note.data.mapper.MemoDataMapper
 import com.gimangi.singleline_note.data.model.MemoItemData
 import com.gimangi.singleline_note.databinding.ActivityMemoDetailBinding
@@ -51,13 +53,11 @@ class MemoDetailActivity :
             if (it != null) {
                 // 뷰모델 데이터 갱신
                 memoDetailViewModel.memoTableName.set(it.memoName)
-                memoDetailViewModel.selectedSummary.set(it.status)
+                memoDetailViewModel.selectedSummary.set(getStatusString(it.status))
                 memoDetailViewModel.summary.set(it.summary)
                 memoDetailViewModel.suffix.set(it.suffix)
 
                 // 리사이클러뷰 데이터 갱신
-
-
                 val list = it.rowList.map { entity ->
                     MemoDataMapper.getMemoItemData(entity)
                 } as MutableList<MemoItemData>
@@ -84,6 +84,7 @@ class MemoDetailActivity :
 
         // focus 해제된 item -> 자동저장
         memoItemListAdapter.changedData.observe(this) {
+            updateSummary()
             autoSaveRow(it)
         }
     }
@@ -132,6 +133,26 @@ class MemoDetailActivity :
             }
 
             memoDetailViewModel.updateMemoTable(tableEntity)
+        }
+    }
+
+    private fun updateSummary() {
+        val tableEntity = memoDetailViewModel.memoTableData.value
+
+        if (tableEntity != null) {
+            var res = 0L
+            var sum = 0L
+            for (i in tableEntity.rowList)
+                sum += i.value
+
+            when (tableEntity.status) {
+                MemoStatus.SUM -> res = sum
+                MemoStatus.AVG -> res = sum / tableEntity.rowList.size
+                MemoStatus.MAX -> tableEntity.rowList.maxOf { it.value }
+                MemoStatus.MIN -> tableEntity.rowList.minOf { it.value }
+            }
+
+            tableEntity.summary = res
         }
     }
 

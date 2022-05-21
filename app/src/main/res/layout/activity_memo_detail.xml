@@ -130,6 +130,7 @@
                     android:id="@+id/rv_memo_item_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:overScrollMode="never"
                     tools:listitem="@layout/item_memo_items_list"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:orientation="vertical"
