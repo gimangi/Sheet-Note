@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.widget.EditText
 import android.widget.TextView
 import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.adapter.MemoItemListAdapter
@@ -15,6 +14,7 @@ import com.gimangi.singleline_note.data.mapper.MemoDataMapper
 import com.gimangi.singleline_note.data.model.MemoItemData
 import com.gimangi.singleline_note.databinding.ActivityMemoDetailBinding
 import com.gimangi.singleline_note.ui.base.BaseActivity
+import com.gimangi.singleline_note.util.NumeralUtil
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.DecimalFormat
 
@@ -56,7 +56,6 @@ class MemoDetailActivity :
                 memoDetailViewModel.selectedSummary.set(getStatusString(it.status))
                 memoDetailViewModel.summary.set(it.summary)
                 memoDetailViewModel.suffix.set(it.suffix)
-
                 // 리사이클러뷰 데이터 갱신
                 val list = it.rowList.map { entity ->
                     MemoDataMapper.getMemoItemData(entity)
@@ -84,8 +83,8 @@ class MemoDetailActivity :
 
         // focus 해제된 item -> 자동저장
         memoItemListAdapter.changedData.observe(this) {
-            updateSummary()
             autoSaveRow(it)
+            updateSummary()
         }
     }
 
@@ -140,19 +139,10 @@ class MemoDetailActivity :
         val tableEntity = memoDetailViewModel.memoTableData.value
 
         if (tableEntity != null) {
-            var res = 0L
-            var sum = 0L
-            for (i in tableEntity.rowList)
-                sum += i.value
+            val summary = NumeralUtil.getSummary(tableEntity)
 
-            when (tableEntity.status) {
-                MemoStatus.SUM -> res = sum
-                MemoStatus.AVG -> res = sum / tableEntity.rowList.size
-                MemoStatus.MAX -> tableEntity.rowList.maxOf { it.value }
-                MemoStatus.MIN -> tableEntity.rowList.minOf { it.value }
-            }
-
-            tableEntity.summary = res
+            memoDetailViewModel.memoTableData.value?.summary = summary
+            memoDetailViewModel.summary.set(summary)
         }
     }
 
