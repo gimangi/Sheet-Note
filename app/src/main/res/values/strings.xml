@@ -25,4 +25,11 @@
 
     <string name="dialog_cancel">취소</string>
     <string name="dialog_delete">삭제</string>
+
+    <!-- memo detail -->
+    <string name="memo_status_sum">합계</string>
+    <string name="memo_status_avg">평균</string>
+    <string name="memo_status_max">최댓값</string>
+    <string name='memo_status_min'>최솟값</string>
+
 </resources>

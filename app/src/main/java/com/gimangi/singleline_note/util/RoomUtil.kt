@@ -2,6 +2,7 @@ package com.gimangi.singleline_note.util
 
 import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.data.database.dto.MemoItemEntity
+import com.gimangi.singleline_note.data.database.dto.MemoStatus
 import com.gimangi.singleline_note.data.database.dto.MemoTableEntity
 import com.gimangi.singleline_note.data.database.room.MemoDatabase
 import com.gimangi.singleline_note.data.model.MemoItemData
@@ -24,7 +25,7 @@ object RoomUtil {
         val newTable = MemoTableEntity(
             memoName = memoName,
             suffix = suffix,
-            status = context.getString(R.string.memo_status_items),
+            status = MemoStatus.SUM,
             updatedAt = Date(),
             rowList = mutableListOf(
                 MemoItemEntity(
@@ -49,5 +50,5 @@ object RoomUtil {
 
     suspend fun deleteMemoList(list: List<Int>) = dao.deleteMemoTables(list)
 
-    private fun getDummyMemo(memoId: Int) = MemoTableEntity("", "", 0, "", Date(), mutableListOf(), memoId)
+    private fun getDummyMemo(memoId: Int) = MemoTableEntity("", "", 0, MemoStatus.SUM, Date(), mutableListOf(), memoId)
 }

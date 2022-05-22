@@ -4,7 +4,9 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gimangi.singleline_note.data.database.dto.MemoTableEntity
+import com.gimangi.singleline_note.data.database.dto.getStatusString
 import com.gimangi.singleline_note.data.model.MemoPreviewData
+import com.gimangi.singleline_note.di.SlnApplication
 import com.gimangi.singleline_note.util.RoomUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,7 +33,7 @@ class MainViewModel: ViewModel() {
                             title = entity.memoName,
                             date = entity.updatedAt,
                             summary = entity.summary.toString(),
-                            status = entity.status,
+                            status = SlnApplication.context().getStatusString(entity.status),
                             suffix = entity.suffix,
                             selected = ObservableField(false)
                         )
