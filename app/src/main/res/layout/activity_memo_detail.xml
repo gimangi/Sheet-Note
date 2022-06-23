@@ -78,6 +78,7 @@
                     android:textColor="@color/white"
                     android:textFontWeight="400"
                     android:textSize="12sp"
+                    android:text="@{viewModel.selectedSummary}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
