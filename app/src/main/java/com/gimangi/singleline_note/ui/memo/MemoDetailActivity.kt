@@ -112,6 +112,12 @@ class MemoDetailActivity :
                 }
             }
         }
+
+        // summary 선택
+        binding.clSelectSummary.setOnClickListener {
+
+        }
+
     }
 
     private fun setCommaNumberText() {
