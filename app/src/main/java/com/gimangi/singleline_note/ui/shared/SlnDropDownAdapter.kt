@@ -1,4 +1,4 @@
-package com.gimangi.singleline_note.util
+package com.gimangi.singleline_note.ui.shared
 
 import android.view.LayoutInflater
 import android.view.View
@@ -63,6 +63,11 @@ class SlnDropDownAdapter(
 
     fun setItemClickListener(itemClickListener: ItemClickListener)  {
         this.itemClickListener = itemClickListener
+    }
+
+    fun setMenuList(list: List<SelectableData>) {
+        dataList.removeAll(dataList)
+        dataList.addAll(list)
     }
 
 }
