@@ -9,7 +9,6 @@ import com.gimangi.singleline_note.data.model.SelectableData
 import com.gimangi.singleline_note.databinding.ItemDropdownBinding
 
 class SlnDropDownAdapter(
-    val selectedItem: Int,
     private val checkVisibility: Boolean = false
 ) : RecyclerView.Adapter<SlnDropDownAdapter.DropDownViewHolder>(){
 
