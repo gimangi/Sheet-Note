@@ -8,27 +8,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.PopupWindow
 import android.widget.RelativeLayout
+import androidx.compose.ui.graphics.vector.addPathNodes
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.data.model.SelectableData
 import com.gimangi.singleline_note.util.dpToPxF
 
-object SlnDropDownUtil {
-    fun showDropDown(context: Context,
-                             layoutInflater: LayoutInflater,
-                             view: View,
-                             width: Int?,
-                             height: Int?,
-                             xOff: Int?,
-                             yOff: Int?,
-                             overlapAnchor: Boolean,
-                             selectedItemId: Int,
-                             dataList: MutableList<SelectableData>,
-                             checkVisibility: Boolean) {
+class SlnDropDown(
+                  layoutInflater: LayoutInflater,
+                  view: View,
+                  width: Int?,
+                  height: Int?,
+                  xOff: Int?,
+                  yOff: Int?,
+                  overlapAnchor: Boolean,
+                  dataList: MutableList<SelectableData>,
+                  checkVisibility: Boolean)
+{
 
+    private lateinit var adapter: SlnDropDownAdapter
+    private lateinit var popup: PopupWindow
+
+    val selected: MutableLiveData<SelectableData>
+        get() = adapter.selected
+
+    init {
         val inflater = layoutInflater.inflate(R.layout.view_dropdown, null, false)
 
-        val popup = PopupWindow(
+        popup = PopupWindow(
             inflater,
             width ?: RelativeLayout.LayoutParams.WRAP_CONTENT,
             height ?: RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -40,12 +48,13 @@ object SlnDropDownUtil {
             popup.elevation = 10F
 
         val recyclerView: RecyclerView = inflater.findViewById(R.id.rv_drop_down)
-        recyclerView.addItemDecoration(
+        /*recyclerView.addItemDecoration(
             SlnDecoration(1.dpToPxF, 0f, context.getColor(R.color.gray1))
         )
+         */
 
         // 리사이클러 뷰 어댑터
-        val adapter = SlnDropDownAdapter(selectedItemId, checkVisibility)
+        adapter = SlnDropDownAdapter(checkVisibility)
 
         // 어댑터 리스너
         adapter.setItemClickListener(object : SlnDropDownAdapter.ItemClickListener {
@@ -63,15 +72,16 @@ object SlnDropDownUtil {
 
         popup.showAsDropDown(view, xOff ?: 0, yOff ?: 0, Gravity.RIGHT)
     }
+
+    fun dismiss() {
+        popup.dismiss()
+    }
 }
 
 fun Activity.showDropDown(
     view: View,
     width: Int?,
     height: Int?,
-    selectedItem: Int,
     dataList: MutableList<SelectableData>,
     checkVisibility: Boolean = false
-) {
-    SlnDropDownUtil.showDropDown(this, layoutInflater, view, width, height, null, null, false, selectedItem, dataList, checkVisibility)
-}
+): SlnDropDown = SlnDropDown(layoutInflater, view, width, height, null, null, false, dataList, checkVisibility)

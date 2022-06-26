@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.TextView
+import androidx.compose.ui.unit.dp
 import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.adapter.MemoItemListAdapter
 import com.gimangi.singleline_note.data.database.dto.MemoItemEntity
@@ -12,9 +13,13 @@ import com.gimangi.singleline_note.data.database.dto.MemoStatus
 import com.gimangi.singleline_note.data.database.dto.getStatusString
 import com.gimangi.singleline_note.data.mapper.MemoDataMapper
 import com.gimangi.singleline_note.data.model.MemoItemData
+import com.gimangi.singleline_note.data.model.SelectableData
 import com.gimangi.singleline_note.databinding.ActivityMemoDetailBinding
 import com.gimangi.singleline_note.ui.base.BaseActivity
+import com.gimangi.singleline_note.ui.shared.SlnDropDown
+import com.gimangi.singleline_note.ui.shared.showDropDown
 import com.gimangi.singleline_note.util.NumeralUtil
+import com.gimangi.singleline_note.util.dpToPx
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.DecimalFormat
 
@@ -24,6 +29,16 @@ class MemoDetailActivity :
     private val memoDetailViewModel: MemoDetailViewModel by viewModel()
 
     private lateinit var memoItemListAdapter: MemoItemListAdapter
+
+    private var dropdown: SlnDropDown? = null
+
+    companion object {
+        val SUMMARY_LIST = arrayOf(
+            R.string.memo_status_sum,
+            R.string.memo_status_avg,
+            R.string.memo_status_max,
+            R.string.memo_status_min)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -116,6 +131,43 @@ class MemoDetailActivity :
         // summary 선택
         binding.clSelectSummary.setOnClickListener {
 
+            if (dropdown != null) {
+                dropdown!!.dismiss()
+            }
+
+            val dropdownList = mutableListOf<SelectableData>()
+
+            for (i in SUMMARY_LIST.indices) {
+                dropdownList.add(
+                    SelectableData(i, getString(SUMMARY_LIST[i]), false)
+                )
+            }
+
+            dropdown = showDropDown(
+                binding.clSelectSummary,
+                100.dpToPx,
+                null,
+                dropdownList
+            )
+
+            dropdown!!.selected.observe(this) {
+
+                val memoStatus = when (it.name) {
+                    getString(R.string.memo_status_sum) -> MemoStatus.SUM
+                    getString(R.string.memo_status_avg) -> MemoStatus.AVG
+                    getString(R.string.memo_status_max) -> MemoStatus.MAX
+                    getString(R.string.memo_status_min) -> MemoStatus.MIN
+                    else -> MemoStatus.SUM
+                }
+
+                memoDetailViewModel.memoTableData.postValue(
+                    memoDetailViewModel.memoTableData.value!!.apply {
+                        this.status = memoStatus
+                    }
+                )
+
+                memoDetailViewModel.updateMemoTable(memoDetailViewModel.memoTableData.value!!)
+            }
         }
 
     }
