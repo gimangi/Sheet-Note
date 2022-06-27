@@ -50,6 +50,28 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="메모 이름" />
 
+            <ImageButton
+                android:id="@+id/ib_edit_memo_define"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="18dp"
+                android:src="@drawable/ic_edit_file"
+                android:background="@android:color/transparent" />
+
+            <ImageButton
+                android:id="@+id/ib_edit_memo_list"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ib_edit_memo_define"
+                android:background="@android:color/transparent"
+                android:layout_marginEnd="18dp"
+                android:src="@drawable/ic_edit" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
