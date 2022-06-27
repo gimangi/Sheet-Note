@@ -143,7 +143,11 @@ class MemoDetailActivity :
         // 메모 행 편집
         binding.ibEditMemoList.setOnClickListener {
             memoItemListAdapter.modifyMode.set(true)
-            Log.d("dsfsdf", memoItemListAdapter.modifyMode.get().toString())
+        }
+
+        // 메모 행 편집 완료
+        binding.btnModifyComplete.setOnClickListener {
+            memoItemListAdapter.modifyMode.set(false)
         }
 
     }
