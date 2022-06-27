@@ -45,9 +45,9 @@ class MemoDetailActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        initMemoListAdapter()
         initBinding()
         observeMemoData()
-        initMemoListAdapter()
         getIntentData()
         loadData()
         initClickListener()
@@ -67,6 +67,7 @@ class MemoDetailActivity :
 
     private fun initBinding() {
         binding.viewModel = memoDetailViewModel
+        binding.adapter = memoItemListAdapter
     }
 
     private fun observeMemoData() {

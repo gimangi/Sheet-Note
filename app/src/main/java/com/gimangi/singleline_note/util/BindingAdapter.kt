@@ -67,6 +67,15 @@ object BindingAdapter {
             view.visibility = INVISIBLE
     }
 
+    @JvmStatic
+    @BindingAdapter("setGone")
+    fun setGone(view: View, flag: Boolean) {
+        if (flag)
+            view.visibility = VISIBLE
+        else
+            view.visibility = GONE
+    }
+
     // Set selected
     @JvmStatic
     @BindingAdapter("setSelected")

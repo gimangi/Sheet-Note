@@ -23,6 +23,20 @@
             android:background="@color/main_background"
             android:layout_weight="1">
 
+            <ImageView
+                android:id="@+id/iv_movable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_grabber"
+                setVisible="@{adapter.modifyMode}"
+                tools:visibility="invisible"
+                />
+
             <TextView
                 android:id="@+id/tv_memo_item_number"
                 android:layout_width="wrap_content"
@@ -38,6 +52,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                setVisible="@{!adapter.modifyMode}"
                 tools:text="1" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -87,7 +102,7 @@
             <EditText
                 android:id="@+id/et_memo_item_value"
                 setTextLong="@{item.value}"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/noto_sans_kr"
@@ -101,9 +116,22 @@
                 android:cursorVisible="@{!adapter.modifyMode}"
                 android:focusable="@{!adapter.modifyMode}"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ib_remove"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="5,500" />
+
+            <ImageButton
+                android:id="@+id/ib_remove"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_remove"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                setGone="@{adapter.modifyMode}"
+                tools:visibility="gone" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -16,7 +16,7 @@ import com.gimangi.singleline_note.data.model.MemoItemData
 import com.gimangi.singleline_note.databinding.ItemMemoItemsListBinding
 import java.text.DecimalFormat
 
-class MemoItemListAdapter() : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHolder>(), ItemTouchHelperListener {
+class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHolder>(), ItemTouchHelperListener {
     private var dataList = mutableListOf<MemoItemData>()
 
     // 변경된 아이템 자동저장을 위한 Observable
@@ -24,9 +24,7 @@ class MemoItemListAdapter() : RecyclerView.Adapter<MemoItemListAdapter.MemoItemH
     val changedData : LiveData<MemoItemData>
         get() = _changedData
 
-    var modifyMode = ObservableField(false)
-
-    private lateinit var itemMoveListener: ItemTouchHelperListener
+    override val modifyMode = ObservableField(false)
 
     inner class MemoItemHolder(private val binding: ItemMemoItemsListBinding, private val context: Context) : RecyclerView.ViewHolder(binding.root) {
 
@@ -143,15 +141,21 @@ class MemoItemListAdapter() : RecyclerView.Adapter<MemoItemListAdapter.MemoItemH
             viewHolder: RecyclerView.ViewHolder,
             target: RecyclerView.ViewHolder
         ): Boolean {
-            return this.listener.onItemMove(viewHolder.absoluteAdapterPosition, target.absoluteAdapterPosition)
+            return if (listener.modifyMode.get() == true)
+                this.listener.onItemMove(viewHolder.absoluteAdapterPosition, target.absoluteAdapterPosition)
+            else
+                false
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            this.listener.onItemSwipe(viewHolder.absoluteAdapterPosition)
+            if (listener.modifyMode.get() == true)
+               this.listener.onItemSwipe(viewHolder.absoluteAdapterPosition)
         }
 
         override fun isLongPressDragEnabled(): Boolean {
-            return true
+            if (listener.modifyMode.get() == true)
+                return true
+            return false
         }
 
     }

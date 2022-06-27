@@ -23,8 +23,8 @@
     <string name="memo_create_title_hint">제목을 입력해주세요.</string>
     <string name="memo_create_suffix_hint">ex) $, EA</string>
 
-    <!-- memo edit -->
-    <string name="memo_edit_toolbar_title">메모 편집</string>
+    <!-- memo modify -->
+    <string name="memo_modify_toolbar_title">메모 편집</string>
 
     <string name="dialog_cancel">취소</string>
     <string name="dialog_delete">삭제</string>
@@ -34,5 +34,7 @@
     <string name="memo_status_avg">평균</string>
     <string name="memo_status_max">최댓값</string>
     <string name='memo_status_min'>최솟값</string>
+    <string name="memo_modify_confirm">완료</string>
+    <string name="memo_modify_cancel">취소</string>
 
 </resources>

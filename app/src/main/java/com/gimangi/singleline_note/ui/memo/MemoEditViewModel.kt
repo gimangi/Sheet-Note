@@ -8,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MemoEditViewModel : MemoDefineViewModel(
-    SlnApplication.context().getString(R.string.memo_edit_toolbar_title)
+    SlnApplication.context().getString(R.string.memo_modify_toolbar_title)
 ) {
     var id: Int = 0
 

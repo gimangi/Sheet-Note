@@ -6,7 +6,9 @@
         <variable
             name="viewModel"
             type="com.gimangi.singleline_note.ui.memo.MemoDetailViewModel" />
-
+        <variable
+            name="adapter"
+            type="com.gimangi.singleline_note.adapter.MemoItemListAdapter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -59,7 +61,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="18dp"
                 android:src="@drawable/ic_edit_file"
-                android:background="@android:color/transparent" />
+                android:background="@android:color/transparent"
+                setVisible="@{!adapter.modifyMode}"/>
 
             <ImageButton
                 android:id="@+id/ib_edit_memo_list"
@@ -70,7 +73,26 @@
                 app:layout_constraintEnd_toStartOf="@id/ib_edit_memo_define"
                 android:background="@android:color/transparent"
                 android:layout_marginEnd="18dp"
-                android:src="@drawable/ic_edit" />
+                android:src="@drawable/ic_edit"
+                setVisible="@{!adapter.modifyMode}"/>
+
+            <TextView
+                android:id="@+id/tv_modify_complete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="18dp"
+                android:text="@string/memo_modify_confirm"
+                setVisible="@{adapter.modifyMode}"
+                android:textSize="12sp"
+                android:fontFamily="@font/noto_sans_kr"
+                android:includeFontPadding="false"
+                android:textFontWeight="500"
+                android:textColor="@color/white"
+                tools:visibility="invisible"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
