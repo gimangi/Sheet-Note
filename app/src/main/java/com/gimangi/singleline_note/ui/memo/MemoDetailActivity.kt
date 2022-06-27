@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.widget.TextView
 import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.adapter.MemoItemListAdapter
@@ -47,6 +46,7 @@ class MemoDetailActivity :
         observeMemoData()
         initMemoListAdapter()
         getIntentData()
+        loadData()
         initClickListener()
         setCommaNumberText()
     }
@@ -55,6 +55,11 @@ class MemoDetailActivity :
         super.onPause()
         // focus를 잃도록 -> 자동저장
         currentFocus?.clearFocus()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadData()
     }
 
     private fun initBinding() {
@@ -83,7 +88,9 @@ class MemoDetailActivity :
 
     private fun getIntentData() {
         memoDetailViewModel.memoId = intent.getIntExtra("memoId", 0)
+    }
 
+    private fun loadData() {
         // load data from DB
         memoDetailViewModel.getMemoData().observe(this) {
             memoDetailViewModel.memoTableData.value = it
