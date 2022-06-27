@@ -6,7 +6,7 @@
         <import type="com.gimangi.singleline_note.R"/>
         <variable
             name="viewModel"
-            type="com.gimangi.singleline_note.ui.memo.MemoCreateViewModel" />
+            type="com.gimangi.singleline_note.ui.memo.MemoDefineViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,7 +39,7 @@
                 android:layout_marginVertical="18dp"
                 android:fontFamily="@font/noto_sans_kr"
                 android:includeFontPadding="false"
-                android:text="@string/memo_create_toolbar_title"
+                android:text="@{viewModel.title}"
                 android:textColor="@color/white"
                 android:textFontWeight="500"
                 android:textSize="16sp"
@@ -86,7 +86,7 @@
             app:layout_constraintTop_toBottomOf="@+id/cl_toolbar_memo_create" />
 
         <com.gimangi.singleline_note.ui.shared.SlnEditText
-            android:id="@+id/et_new_memo_title"
+            android:id="@+id/et_new_memo_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
@@ -109,7 +109,7 @@
             android:textSize="14sp"
             android:layout_marginTop="38dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_new_memo_title" />
+            app:layout_constraintTop_toBottomOf="@+id/et_new_memo_name" />
 
         <com.gimangi.singleline_note.ui.shared.SlnEditText
             android:id="@+id/et_new_memo_suffix"

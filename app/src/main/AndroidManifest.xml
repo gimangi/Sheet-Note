@@ -11,6 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SingleLineNote">
         <activity
+            android:name=".ui.memo.MemoEditActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.memo.MemoDetailActivity"
             android:exported="false" />
         <activity

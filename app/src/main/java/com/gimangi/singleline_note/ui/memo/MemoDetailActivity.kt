@@ -1,11 +1,10 @@
 package com.gimangi.singleline_note.ui.memo
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.widget.TextView
-import androidx.compose.ui.unit.dp
 import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.adapter.MemoItemListAdapter
 import com.gimangi.singleline_note.data.database.dto.MemoItemEntity
@@ -47,6 +46,7 @@ class MemoDetailActivity :
         observeMemoData()
         initMemoListAdapter()
         getIntentData()
+        loadData()
         initClickListener()
         setCommaNumberText()
     }
@@ -55,6 +55,11 @@ class MemoDetailActivity :
         super.onPause()
         // focus를 잃도록 -> 자동저장
         currentFocus?.clearFocus()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadData()
     }
 
     private fun initBinding() {
@@ -77,15 +82,15 @@ class MemoDetailActivity :
                 } as MutableList<MemoItemData>
 
                 memoItemListAdapter.setDataList(list)
-
-
             }
         }
     }
 
     private fun getIntentData() {
         memoDetailViewModel.memoId = intent.getIntExtra("memoId", 0)
+    }
 
+    private fun loadData() {
         // load data from DB
         memoDetailViewModel.getMemoData().observe(this) {
             memoDetailViewModel.memoTableData.value = it
@@ -111,63 +116,27 @@ class MemoDetailActivity :
 
         // 행 추가
         binding.clAddRow.setOnClickListener {
-            val table = memoDetailViewModel.memoTableData.value
-
-            if (table != null) {
-                val newRow = MemoItemEntity(
-                    order = table.rowList.size + 1,
-                    item = "",
-                    value = 0,
-                    tableId = table.memoId
-                )
-
-                memoDetailViewModel.insertMemoItem(table, newRow).observe(this) {
-                    if (it != null)
-                        memoDetailViewModel.memoTableData.value = it
-                }
-            }
+            addMemoRow()
         }
 
         // summary 선택
         binding.clSelectSummary.setOnClickListener {
+            showSummaryDropDown()
+        }
 
-            if (dropdown != null) {
-                dropdown!!.dismiss()
+        // 메모 정의 편집
+        binding.ibEditMemoDefine.setOnClickListener {
+            val intent = Intent(this@MemoDetailActivity, MemoEditActivity::class.java).apply {
+                putExtra("memoId", memoDetailViewModel.memoId)
+                putExtra("memoName", memoDetailViewModel.memoTableName.get())
+                putExtra("memoSuffix", memoDetailViewModel.suffix.get())
             }
+            startActivity(intent)
+        }
 
-            val dropdownList = mutableListOf<SelectableData>()
+        // 메모 행 편집
+        binding.ibEditMemoList.setOnClickListener {
 
-            for (i in SUMMARY_LIST.indices) {
-                dropdownList.add(
-                    SelectableData(i, getString(SUMMARY_LIST[i]), false)
-                )
-            }
-
-            dropdown = showDropDown(
-                binding.clSelectSummary,
-                100.dpToPx,
-                null,
-                dropdownList
-            )
-
-            dropdown!!.selected.observe(this) {
-
-                val memoStatus = when (it.name) {
-                    getString(R.string.memo_status_sum) -> MemoStatus.SUM
-                    getString(R.string.memo_status_avg) -> MemoStatus.AVG
-                    getString(R.string.memo_status_max) -> MemoStatus.MAX
-                    getString(R.string.memo_status_min) -> MemoStatus.MIN
-                    else -> MemoStatus.SUM
-                }
-
-                memoDetailViewModel.memoTableData.postValue(
-                    memoDetailViewModel.memoTableData.value!!.apply {
-                        this.status = memoStatus
-                    }
-                )
-
-                memoDetailViewModel.updateMemoTable(memoDetailViewModel.memoTableData.value!!)
-            }
         }
 
     }
@@ -201,6 +170,67 @@ class MemoDetailActivity :
 
             memoDetailViewModel.memoTableData.value?.summary = summary
             memoDetailViewModel.summary.set(summary)
+        }
+    }
+
+    private fun addMemoRow() {
+        val table = memoDetailViewModel.memoTableData.value
+
+        if (table != null) {
+            val newRow = MemoItemEntity(
+                order = table.rowList.size + 1,
+                item = "",
+                value = 0,
+                tableId = table.memoId
+            )
+
+            memoDetailViewModel.insertMemoItem(table, newRow).observe(this) {
+                if (it != null)
+                    memoDetailViewModel.memoTableData.value = it
+            }
+        }
+    }
+
+    private fun showSummaryDropDown() {
+        if (dropdown != null) {
+            dropdown!!.dismiss()
+        }
+
+        val dropdownList = mutableListOf<SelectableData>()
+
+        for (i in SUMMARY_LIST.indices) {
+            dropdownList.add(
+                SelectableData(i, getString(SUMMARY_LIST[i]), false)
+            )
+        }
+
+        dropdown = showDropDown(
+            binding.clSelectSummary,
+            100.dpToPx,
+            null,
+            dropdownList
+        )
+
+        dropdown!!.selected.observe(this) {
+
+            val tableData = memoDetailViewModel.memoTableData.value ?: return@observe
+
+            val memoStatus = when (it.name) {
+                getString(R.string.memo_status_sum) -> MemoStatus.SUM
+                getString(R.string.memo_status_avg) -> MemoStatus.AVG
+                getString(R.string.memo_status_max) -> MemoStatus.MAX
+                getString(R.string.memo_status_min) -> MemoStatus.MIN
+                else -> MemoStatus.SUM
+            }
+
+            memoDetailViewModel.updateMemoTable(
+                tableData.apply {
+                    this.status = memoStatus
+                }
+            ).observe(this) { newTable ->
+                memoDetailViewModel.memoTableData.value = newTable
+                updateSummary()
+            }
         }
     }
 
