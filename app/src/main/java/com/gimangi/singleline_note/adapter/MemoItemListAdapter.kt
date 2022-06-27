@@ -137,13 +137,14 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
         private val listener: ItemTouchHelperListener
     ) : ItemTouchHelper.Callback() {
 
+        private var isMoved = false
+
         override fun getMovementFlags(
             recyclerView: RecyclerView,
             viewHolder: RecyclerView.ViewHolder
         ): Int {
             val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
-            val swipeFlags = ItemTouchHelper.START or ItemTouchHelper.END
-            return makeMovementFlags(dragFlags, swipeFlags)
+            return makeMovementFlags(dragFlags, 0)
         }
 
         override fun onMove(
@@ -151,9 +152,13 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
             viewHolder: RecyclerView.ViewHolder,
             target: RecyclerView.ViewHolder
         ): Boolean {
-            return if (listener.modifyMode.get() == true)
-                this.listener.onItemMove(viewHolder.absoluteAdapterPosition, target.absoluteAdapterPosition)
-            else
+            return if (listener.modifyMode.get() == true) {
+                isMoved = true
+                this.listener.onItemMove(
+                    viewHolder.absoluteAdapterPosition,
+                    target.absoluteAdapterPosition
+                )
+            } else
                 false
         }
 
@@ -168,14 +173,20 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
             return false
         }
 
+        override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+            super.onSelectedChanged(viewHolder, actionState)
+            if (isMoved) {
+                isMoved = false
+                listener.afterDragAndDrop()
+            }
+        }
+
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         val item = dataList[fromPosition]
         dataList.remove(item)
         dataList.add(toPosition, item)
-
-        realign()
         notifyItemMoved(fromPosition, toPosition)
         return true
     }
@@ -184,6 +195,11 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
         dataList.removeAt(position)
         realign()
         notifyItemRemoved(position)
+    }
+
+    override fun afterDragAndDrop() {
+        realign()
+        notifyDataSetChanged()
     }
 
     private fun realign() {

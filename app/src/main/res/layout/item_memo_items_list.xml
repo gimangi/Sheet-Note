@@ -120,21 +120,9 @@
                 android:focusable="@{!adapter.modifyMode}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/ib_remove"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="5,500" />
-
-            <ImageButton
-                android:id="@+id/ib_remove"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_remove"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                setGone="@{adapter.modifyMode}"
-                tools:visibility="gone" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
