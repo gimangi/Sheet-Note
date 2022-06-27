@@ -43,12 +43,11 @@ object RoomUtil {
         return dao.addMemoItem(table, item)
     }
 
-    suspend fun updateMemo(tableEntity: MemoTableEntity) {
+    suspend fun updateMemo(tableEntity: MemoTableEntity): MemoTableEntity {
         tableEntity.updatedAt = Date()
         dao.updateMemoTable(tableEntity)
+        return tableEntity
     }
 
     suspend fun deleteMemoList(list: List<Int>) = dao.deleteMemoTables(list)
-
-    private fun getDummyMemo(memoId: Int) = MemoTableEntity("", "", 0, MemoStatus.SUM, Date(), mutableListOf(), memoId)
 }

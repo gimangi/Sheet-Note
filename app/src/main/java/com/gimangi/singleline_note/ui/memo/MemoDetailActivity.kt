@@ -5,7 +5,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.TextView
-import androidx.compose.ui.unit.dp
 import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.adapter.MemoItemListAdapter
 import com.gimangi.singleline_note.data.database.dto.MemoItemEntity
@@ -77,8 +76,6 @@ class MemoDetailActivity :
                 } as MutableList<MemoItemData>
 
                 memoItemListAdapter.setDataList(list)
-
-
             }
         }
     }
@@ -152,6 +149,8 @@ class MemoDetailActivity :
 
             dropdown!!.selected.observe(this) {
 
+                val tableData = memoDetailViewModel.memoTableData.value ?: return@observe
+
                 val memoStatus = when (it.name) {
                     getString(R.string.memo_status_sum) -> MemoStatus.SUM
                     getString(R.string.memo_status_avg) -> MemoStatus.AVG
@@ -160,13 +159,14 @@ class MemoDetailActivity :
                     else -> MemoStatus.SUM
                 }
 
-                memoDetailViewModel.memoTableData.postValue(
-                    memoDetailViewModel.memoTableData.value!!.apply {
+                memoDetailViewModel.updateMemoTable(
+                    tableData.apply {
                         this.status = memoStatus
                     }
-                )
-
-                memoDetailViewModel.updateMemoTable(memoDetailViewModel.memoTableData.value!!)
+                ).observe(this) { newTable ->
+                    memoDetailViewModel.memoTableData.value = newTable
+                    updateSummary()
+                }
             }
         }
 
