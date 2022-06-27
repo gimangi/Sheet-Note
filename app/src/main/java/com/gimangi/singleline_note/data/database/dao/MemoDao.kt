@@ -35,6 +35,18 @@ abstract class MemoDao {
         return memoTableEntity
     }
 
+    @Transaction
+    open suspend fun updateMemoTableDefine(memoId: Int, memoName: String, suffix: String) {
+        val memoTable = getMemoById(memoId)
+
+        if (memoTable != null) {
+            updateMemoTable(memoTable.apply {
+                this.memoName = memoName
+                this.suffix = suffix
+            })
+        }
+    }
+
     @Insert
     abstract suspend fun insertMemoItem(memoItemEntity: MemoItemEntity)
 

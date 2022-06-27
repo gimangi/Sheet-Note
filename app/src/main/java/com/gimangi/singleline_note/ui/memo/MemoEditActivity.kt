@@ -62,10 +62,10 @@ class MemoEditActivity :
             finish()
         }
         binding.btnMemoCreate.setOnClickListener {
-//            memoEditViewModel.insertNewMemo(
-//                memoName = memoEditViewModel.name,
-//                suffix = memoEditViewModel.suffix
-//            )
+            memoEditViewModel.updateMemoDefine(
+                binding.etNewMemoName.text,
+                binding.etNewMemoSuffix.text
+            )
             finish()
         }
     }

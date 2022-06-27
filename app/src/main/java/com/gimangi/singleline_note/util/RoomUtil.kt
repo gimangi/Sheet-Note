@@ -49,5 +49,9 @@ object RoomUtil {
         return tableEntity
     }
 
+    suspend fun updateMemoDefine(memoId: Int, memoName: String, suffix: String) {
+        dao.updateMemoTableDefine(memoId, memoName, suffix)
+    }
+
     suspend fun deleteMemoList(list: List<Int>) = dao.deleteMemoTables(list)
 }
