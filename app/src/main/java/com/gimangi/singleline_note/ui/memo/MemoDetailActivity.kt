@@ -1,5 +1,6 @@
 package com.gimangi.singleline_note.ui.memo
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -108,66 +109,27 @@ class MemoDetailActivity :
 
         // 행 추가
         binding.clAddRow.setOnClickListener {
-            val table = memoDetailViewModel.memoTableData.value
-
-            if (table != null) {
-                val newRow = MemoItemEntity(
-                    order = table.rowList.size + 1,
-                    item = "",
-                    value = 0,
-                    tableId = table.memoId
-                )
-
-                memoDetailViewModel.insertMemoItem(table, newRow).observe(this) {
-                    if (it != null)
-                        memoDetailViewModel.memoTableData.value = it
-                }
-            }
+            addMemoRow()
         }
 
         // summary 선택
         binding.clSelectSummary.setOnClickListener {
+            showSummaryDropDown()
+        }
 
-            if (dropdown != null) {
-                dropdown!!.dismiss()
+        // 메모 정의 편집
+        binding.ibEditMemoDefine.setOnClickListener {
+            val intent = Intent(this@MemoDetailActivity, MemoEditActivity::class.java).apply {
+                putExtra("memoId", memoDetailViewModel.memoId)
+                putExtra("memoName", memoDetailViewModel.memoTableName.get())
+                putExtra("memoSuffix", memoDetailViewModel.suffix.get())
             }
+            startActivity(intent)
+        }
 
-            val dropdownList = mutableListOf<SelectableData>()
+        // 메모 행 편집
+        binding.ibEditMemoList.setOnClickListener {
 
-            for (i in SUMMARY_LIST.indices) {
-                dropdownList.add(
-                    SelectableData(i, getString(SUMMARY_LIST[i]), false)
-                )
-            }
-
-            dropdown = showDropDown(
-                binding.clSelectSummary,
-                100.dpToPx,
-                null,
-                dropdownList
-            )
-
-            dropdown!!.selected.observe(this) {
-
-                val tableData = memoDetailViewModel.memoTableData.value ?: return@observe
-
-                val memoStatus = when (it.name) {
-                    getString(R.string.memo_status_sum) -> MemoStatus.SUM
-                    getString(R.string.memo_status_avg) -> MemoStatus.AVG
-                    getString(R.string.memo_status_max) -> MemoStatus.MAX
-                    getString(R.string.memo_status_min) -> MemoStatus.MIN
-                    else -> MemoStatus.SUM
-                }
-
-                memoDetailViewModel.updateMemoTable(
-                    tableData.apply {
-                        this.status = memoStatus
-                    }
-                ).observe(this) { newTable ->
-                    memoDetailViewModel.memoTableData.value = newTable
-                    updateSummary()
-                }
-            }
         }
 
     }
@@ -201,6 +163,67 @@ class MemoDetailActivity :
 
             memoDetailViewModel.memoTableData.value?.summary = summary
             memoDetailViewModel.summary.set(summary)
+        }
+    }
+
+    private fun addMemoRow() {
+        val table = memoDetailViewModel.memoTableData.value
+
+        if (table != null) {
+            val newRow = MemoItemEntity(
+                order = table.rowList.size + 1,
+                item = "",
+                value = 0,
+                tableId = table.memoId
+            )
+
+            memoDetailViewModel.insertMemoItem(table, newRow).observe(this) {
+                if (it != null)
+                    memoDetailViewModel.memoTableData.value = it
+            }
+        }
+    }
+
+    private fun showSummaryDropDown() {
+        if (dropdown != null) {
+            dropdown!!.dismiss()
+        }
+
+        val dropdownList = mutableListOf<SelectableData>()
+
+        for (i in SUMMARY_LIST.indices) {
+            dropdownList.add(
+                SelectableData(i, getString(SUMMARY_LIST[i]), false)
+            )
+        }
+
+        dropdown = showDropDown(
+            binding.clSelectSummary,
+            100.dpToPx,
+            null,
+            dropdownList
+        )
+
+        dropdown!!.selected.observe(this) {
+
+            val tableData = memoDetailViewModel.memoTableData.value ?: return@observe
+
+            val memoStatus = when (it.name) {
+                getString(R.string.memo_status_sum) -> MemoStatus.SUM
+                getString(R.string.memo_status_avg) -> MemoStatus.AVG
+                getString(R.string.memo_status_max) -> MemoStatus.MAX
+                getString(R.string.memo_status_min) -> MemoStatus.MIN
+                else -> MemoStatus.SUM
+            }
+
+            memoDetailViewModel.updateMemoTable(
+                tableData.apply {
+                    this.status = memoStatus
+                }
+            ).observe(this) { newTable ->
+                memoDetailViewModel.memoTableData.value = newTable
+                updateSummary()
+            }
         }
     }
 

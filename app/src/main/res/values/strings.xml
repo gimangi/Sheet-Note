@@ -23,6 +23,9 @@
     <string name="memo_create_title_hint">제목을 입력해주세요.</string>
     <string name="memo_create_suffix_hint">ex) $, EA</string>
 
+    <!-- memo edit -->
+    <string name="memo_edit_toolbar_title">메모 편집</string>
+
     <string name="dialog_cancel">취소</string>
     <string name="dialog_delete">삭제</string>
 
