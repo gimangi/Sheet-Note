@@ -5,18 +5,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
-import com.gimangi.singleline_note.data.model.SelectableData
+import com.gimangi.singleline_note.data.model.DropdownItem
 import com.gimangi.singleline_note.databinding.ItemDropdownBinding
 
 class SlnDropDownAdapter(
     private val checkVisibility: Boolean = false
 ) : RecyclerView.Adapter<SlnDropDownAdapter.DropDownViewHolder>(){
 
-    private val dataList = mutableListOf<SelectableData>()
-    val selected = MutableLiveData<SelectableData>()
+    private val dataList = mutableListOf<DropdownItem>()
+    val selected = MutableLiveData<DropdownItem>()
 
     class DropDownViewHolder(private val binding: ItemDropdownBinding, private val checkVisibility: Boolean) : RecyclerView.ViewHolder(binding.root) {
-        fun onBind(data: SelectableData) {
+        fun onBind(data: DropdownItem) {
             if (data.isSelected && checkVisibility)
                 binding.ivChecked.visibility = View.VISIBLE
             else
@@ -64,7 +64,7 @@ class SlnDropDownAdapter(
         this.itemClickListener = itemClickListener
     }
 
-    fun setMenuList(list: List<SelectableData>) {
+    fun setMenuList(list: List<DropdownItem>) {
         dataList.removeAll(dataList)
         dataList.addAll(list)
     }

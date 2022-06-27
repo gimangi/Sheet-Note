@@ -1,6 +1,6 @@
 package com.gimangi.singleline_note.data.model
 
-data class SelectableData (
+data class DropdownItem (
     val id: Int,
     val name: String,
     var isSelected: Boolean

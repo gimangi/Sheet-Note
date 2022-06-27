@@ -14,7 +14,7 @@ import com.gimangi.singleline_note.data.database.dto.MemoStatus
 import com.gimangi.singleline_note.data.database.dto.getStatusString
 import com.gimangi.singleline_note.data.mapper.MemoDataMapper
 import com.gimangi.singleline_note.data.model.MemoItemData
-import com.gimangi.singleline_note.data.model.SelectableData
+import com.gimangi.singleline_note.data.model.DropdownItem
 import com.gimangi.singleline_note.databinding.ActivityMemoDetailBinding
 import com.gimangi.singleline_note.ui.base.BaseActivity
 import com.gimangi.singleline_note.ui.shared.SlnDropDown
@@ -203,11 +203,11 @@ class MemoDetailActivity :
             dropdown!!.dismiss()
         }
 
-        val dropdownList = mutableListOf<SelectableData>()
+        val dropdownList = mutableListOf<DropdownItem>()
 
         for (i in SUMMARY_LIST.indices) {
             dropdownList.add(
-                SelectableData(i, getString(SUMMARY_LIST[i]), false)
+                DropdownItem(i, getString(SUMMARY_LIST[i]), false)
             )
         }
 

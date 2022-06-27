@@ -3,6 +3,7 @@ package com.gimangi.singleline_note.adapter
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,11 +14,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.gimangi.singleline_note.data.model.MemoItemData
+import com.gimangi.singleline_note.data.model.Selectable
 import com.gimangi.singleline_note.databinding.ItemMemoItemsListBinding
 import java.text.DecimalFormat
 
 class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHolder>(), ItemTouchHelperListener {
-    private var dataList = mutableListOf<MemoItemData>()
+    private var dataList = mutableListOf<Selectable<MemoItemData>>()
 
     // 변경된 아이템 자동저장을 위한 Observable
     private val _changedData = MutableLiveData<MemoItemData>()
@@ -27,10 +29,13 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
     override val modifyMode = ObservableField(false)
 
     inner class MemoItemHolder(private val binding: ItemMemoItemsListBinding, private val context: Context) : RecyclerView.ViewHolder(binding.root) {
+        val lineNum = ObservableField<Int>(0)
 
         fun onBind(data: MemoItemData) {
             binding.item = data
             binding.adapter = this@MemoItemListAdapter
+            binding.viewHolder = this
+            lineNum.set(data.number)
 
             // focus 해제 시 자동 저장
             val autoSaveListener =
@@ -56,10 +61,10 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
 
                         // data list 수정
                         dataList.filter {
-                            it.number == data.number
+                            it.data.number == data.number
                         }.forEach {
-                            it.name = newName
-                            it.value = newValue
+                            it.data.name = newName
+                            it.data.value = newValue
                         }
 
                     }
@@ -85,7 +90,7 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
     }
 
     override fun onBindViewHolder(holder: MemoItemHolder, position: Int) {
-        holder.onBind(dataList[position])
+        holder.onBind(dataList[position].data)
     }
 
     override fun getItemCount(): Int = dataList.size
@@ -93,7 +98,12 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
     fun getDataList() = this.dataList
 
     fun setDataList(dataList: MutableList<MemoItemData>) {
-        this.dataList = dataList
+        this.dataList = dataList.map {
+            Selectable(
+                data = it,
+                selected = false
+            )
+        } as MutableList<Selectable<MemoItemData>>
         notifyDataSetChanged()
     }
 
@@ -165,13 +175,22 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
         dataList.remove(item)
         dataList.add(toPosition, item)
 
+        realign()
         notifyItemMoved(fromPosition, toPosition)
         return true
     }
 
     override fun onItemSwipe(position: Int) {
         dataList.removeAt(position)
+        realign()
         notifyItemRemoved(position)
+    }
+
+    private fun realign() {
+        for (i in 0 until dataList.size) {
+            dataList[i].data.number = i
+        }
+        notifyDataSetChanged()
     }
 
 }

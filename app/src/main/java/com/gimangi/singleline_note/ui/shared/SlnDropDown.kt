@@ -1,37 +1,33 @@
 package com.gimangi.singleline_note.ui.shared
 
 import android.app.Activity
-import android.content.Context
-import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.PopupWindow
 import android.widget.RelativeLayout
-import androidx.compose.ui.graphics.vector.addPathNodes
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.gimangi.singleline_note.R
-import com.gimangi.singleline_note.data.model.SelectableData
-import com.gimangi.singleline_note.util.dpToPxF
+import com.gimangi.singleline_note.data.model.DropdownItem
 
 class SlnDropDown(
-                  layoutInflater: LayoutInflater,
-                  view: View,
-                  width: Int?,
-                  height: Int?,
-                  xOff: Int?,
-                  yOff: Int?,
-                  overlapAnchor: Boolean,
-                  dataList: MutableList<SelectableData>,
-                  checkVisibility: Boolean)
+    layoutInflater: LayoutInflater,
+    view: View,
+    width: Int?,
+    height: Int?,
+    xOff: Int?,
+    yOff: Int?,
+    overlapAnchor: Boolean,
+    dataList: MutableList<DropdownItem>,
+    checkVisibility: Boolean)
 {
 
     private lateinit var adapter: SlnDropDownAdapter
     private lateinit var popup: PopupWindow
 
-    val selected: MutableLiveData<SelectableData>
+    val selected: MutableLiveData<DropdownItem>
         get() = adapter.selected
 
     init {
@@ -85,6 +81,6 @@ fun Activity.showDropDown(
     view: View,
     width: Int?,
     height: Int?,
-    dataList: MutableList<SelectableData>,
+    dataList: MutableList<DropdownItem>,
     checkVisibility: Boolean = false
 ): SlnDropDown = SlnDropDown(layoutInflater, view, width, height, null, null, false, dataList, checkVisibility)
