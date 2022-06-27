@@ -6,9 +6,13 @@
         <variable
             name="item"
             type="com.gimangi.singleline_note.data.model.MemoItemData" />
+        <variable
+            name="adapter"
+            type="com.gimangi.singleline_note.adapter.MemoItemListAdapter" />
     </data>
 
     <LinearLayout
+        android:id="@+id/ll_memo_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -54,6 +58,8 @@
                 android:textFontWeight="400"
                 android:textColor="@color/black"
                 android:textSize="10sp"
+                android:cursorVisible="@{!adapter.modifyMode}"
+                android:focusable="@{!adapter.modifyMode}"
                 android:includeFontPadding="false"
                 android:paddingStart="15dp"
                 android:background="@android:color/transparent"
@@ -92,6 +98,8 @@
                 android:textColor="@color/black"
                 android:textFontWeight="400"
                 android:textSize="10sp"
+                android:cursorVisible="@{!adapter.modifyMode}"
+                android:focusable="@{!adapter.modifyMode}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

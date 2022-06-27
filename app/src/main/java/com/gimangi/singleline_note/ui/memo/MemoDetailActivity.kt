@@ -4,7 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.TextView
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.adapter.MemoItemListAdapter
 import com.gimangi.singleline_note.data.database.dto.MemoItemEntity
@@ -28,6 +30,7 @@ class MemoDetailActivity :
     private val memoDetailViewModel: MemoDetailViewModel by viewModel()
 
     private lateinit var memoItemListAdapter: MemoItemListAdapter
+    private lateinit var memoItemHelper: ItemTouchHelper
 
     private var dropdown: SlnDropDown? = null
 
@@ -99,6 +102,8 @@ class MemoDetailActivity :
 
     private fun initMemoListAdapter() {
         memoItemListAdapter = MemoItemListAdapter()
+        memoItemHelper = ItemTouchHelper(MemoItemListAdapter.MemoItemTouchHelperCallback(memoItemListAdapter))
+        memoItemHelper.attachToRecyclerView(binding.rvMemoItemList)
         binding.rvMemoItemList.adapter = memoItemListAdapter
 
         // focus 해제된 item -> 자동저장
@@ -136,7 +141,8 @@ class MemoDetailActivity :
 
         // 메모 행 편집
         binding.ibEditMemoList.setOnClickListener {
-
+            memoItemListAdapter.modifyMode.set(true)
+            Log.d("dsfsdf", memoItemListAdapter.modifyMode.get().toString())
         }
 
     }

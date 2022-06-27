@@ -3,19 +3,20 @@ package com.gimangi.singleline_note.adapter
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.gimangi.singleline_note.data.model.MemoItemData
 import com.gimangi.singleline_note.databinding.ItemMemoItemsListBinding
 import java.text.DecimalFormat
 
-class MemoItemListAdapter() : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHolder>() {
+class MemoItemListAdapter() : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHolder>(), ItemTouchHelperListener {
     private var dataList = mutableListOf<MemoItemData>()
 
     // 변경된 아이템 자동저장을 위한 Observable
@@ -23,10 +24,15 @@ class MemoItemListAdapter() : RecyclerView.Adapter<MemoItemListAdapter.MemoItemH
     val changedData : LiveData<MemoItemData>
         get() = _changedData
 
+    var modifyMode = ObservableField(false)
+
+    private lateinit var itemMoveListener: ItemTouchHelperListener
+
     inner class MemoItemHolder(private val binding: ItemMemoItemsListBinding, private val context: Context) : RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(data: MemoItemData) {
             binding.item = data
+            binding.adapter = this@MemoItemListAdapter
 
             // focus 해제 시 자동 저장
             val autoSaveListener =
@@ -119,5 +125,49 @@ class MemoItemListAdapter() : RecyclerView.Adapter<MemoItemListAdapter.MemoItemH
 
     }
 
+    class MemoItemTouchHelperCallback(
+        private val listener: ItemTouchHelperListener
+    ) : ItemTouchHelper.Callback() {
+
+        override fun getMovementFlags(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder
+        ): Int {
+            val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
+            val swipeFlags = ItemTouchHelper.START or ItemTouchHelper.END
+            return makeMovementFlags(dragFlags, swipeFlags)
+        }
+
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean {
+            return this.listener.onItemMove(viewHolder.absoluteAdapterPosition, target.absoluteAdapterPosition)
+        }
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            this.listener.onItemSwipe(viewHolder.absoluteAdapterPosition)
+        }
+
+        override fun isLongPressDragEnabled(): Boolean {
+            return true
+        }
+
+    }
+
+    override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
+        val item = dataList[fromPosition]
+        dataList.remove(item)
+        dataList.add(toPosition, item)
+
+        notifyItemMoved(fromPosition, toPosition)
+        return true
+    }
+
+    override fun onItemSwipe(position: Int) {
+        dataList.removeAt(position)
+        notifyItemRemoved(position)
+    }
 
 }
