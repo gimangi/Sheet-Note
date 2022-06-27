@@ -181,6 +181,7 @@ class MemoDetailActivity :
 
             memoDetailViewModel.memoTableData.value?.summary = summary
             memoDetailViewModel.summary.set(summary)
+            memoDetailViewModel.updateMemoTable(memoDetailViewModel.memoTableData.value!!)
         }
     }
 
