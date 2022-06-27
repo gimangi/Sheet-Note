@@ -2,6 +2,7 @@ package com.gimangi.singleline_note.ui.shared
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -43,6 +44,8 @@ class SlnDropDown(
             false
         )
 
+        // 외부 영역 클릭시 닫히도록
+        popup.isFocusable = true
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             popup.elevation = 10F
