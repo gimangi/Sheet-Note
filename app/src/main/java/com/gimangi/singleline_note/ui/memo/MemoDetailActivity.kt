@@ -361,7 +361,7 @@ class MemoDetailActivity :
     private fun initAdmobFront() {
         var adRequest = AdRequest.Builder().build()
 
-        InterstitialAd.load(this,getString(R.string.admob_front_test_id), adRequest, object : InterstitialAdLoadCallback() {
+        InterstitialAd.load(this,getString(R.string.admob_front_id), adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 Log.d(TAG, adError?.toString())
                 mInterstitialAd = null

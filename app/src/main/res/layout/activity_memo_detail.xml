@@ -101,7 +101,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:adSize="BANNER"
-            app:adUnitId="@string/admob_banner_test_id"
+            app:adUnitId="@string/admob_banner_id"
             app:layout_constraintTop_toBottomOf="@+id/cl_toolbar_memo_detail" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
