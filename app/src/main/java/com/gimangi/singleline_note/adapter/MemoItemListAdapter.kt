@@ -16,7 +16,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gimangi.singleline_note.data.model.MemoItemData
 import com.gimangi.singleline_note.data.model.Selectable
 import com.gimangi.singleline_note.databinding.ItemMemoItemsListBinding
+import com.gimangi.singleline_note.databinding.ItemMemoListBinding
 import java.text.DecimalFormat
+import java.util.*
 
 class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHolder>(), ItemTouchHelperListener {
     private var dataList = mutableListOf<Selectable<MemoItemData>>()
@@ -40,35 +42,10 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
             // focus 해제 시 자동 저장
             val autoSaveListener =
                 View.OnFocusChangeListener { _, b ->
-                    /// focus 해제
-                    if (!b) {
-
-                        val newName = binding.etMemoItemName.text.toString()
-                        val valueStr = binding.etMemoItemValue.text.toString().replace(",", "")
-                        var newValue = 0L
-                        if (valueStr.isNotEmpty()) {
-                            newValue = valueStr.toLong()
-                        }
-
-                        // observer 에게 알림
-                        _changedData.value = MemoItemData(
-                            number = data.number,
-                            name = newName,
-                            value = newValue,
-                            itemId = data.itemId,
-                            tableId = data.tableId
-                        )
-
-                        // data list 수정
-                        dataList.filter {
-                            it.data.number == data.number
-                        }.forEach {
-                            it.data.name = newName
-                            it.data.value = newValue
-                        }
-
-                    }
-                }
+                    if (!b)
+                        autoSave(data,
+                            binding.etMemoItemName.text.toString(),
+                            binding.etMemoItemValue.text.toString()) }
 
             binding.etMemoItemName.onFocusChangeListener = autoSaveListener
             binding.etMemoItemValue.onFocusChangeListener = autoSaveListener
@@ -105,6 +82,34 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
             )
         } as MutableList<Selectable<MemoItemData>>
         notifyDataSetChanged()
+    }
+
+    private fun autoSave(data: MemoItemData, newName: String, newValueStr: String) {
+        val temp = newValueStr.replace(",", "")
+        var newValue = 0L
+        if (temp.isNotEmpty()) {
+            newValue = temp.toLong()
+        }
+        autoSave(data, newName, newValue)
+    }
+
+    private fun autoSave(data: MemoItemData, newName: String, newValue: Long) {
+        // observer 에게 알림
+        _changedData.value = MemoItemData(
+            number = data.number,
+            name = newName,
+            value = newValue,
+            itemId = data.itemId,
+            tableId = data.tableId
+        )
+
+        // data list 수정
+        dataList.filter {
+            it.data.number == data.number
+        }.forEach {
+            it.data.name = newName
+            it.data.value = newValue
+        }
     }
 
     inner class CommaTextWithLimitWatcher(val editText: EditText) : TextWatcher {
@@ -163,8 +168,6 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            if (listener.modifyMode.get() == true)
-               this.listener.onItemSwipe(viewHolder.absoluteAdapterPosition)
         }
 
         override fun isLongPressDragEnabled(): Boolean {
@@ -184,17 +187,14 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
-        val item = dataList[fromPosition]
-        dataList.remove(item)
-        dataList.add(toPosition, item)
+        Collections.swap(dataList, fromPosition, toPosition)
+        Log.d("bug fix-1", "${dataList[fromPosition]} $fromPosition -> $toPosition ${dataList[toPosition]}")
+        Log.d("bug fix-2", dataList.toString())
         notifyItemMoved(fromPosition, toPosition)
         return true
     }
 
     override fun onItemSwipe(position: Int) {
-        dataList.removeAt(position)
-        realign()
-        notifyItemRemoved(position)
     }
 
     override fun afterDragAndDrop() {
@@ -204,9 +204,14 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
 
     private fun realign() {
         for (i in 0 until dataList.size) {
-            dataList[i].data.number = i
+            val data = dataList[i].data
+            data.number = i+1
         }
-        notifyDataSetChanged()
+
+        for (d in dataList) {
+            val data = d.data
+            autoSave(data, data.name, data.value)
+        }
     }
 
 }
