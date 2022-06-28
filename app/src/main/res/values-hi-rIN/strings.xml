@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SingleLine Note</string>
+    <string name="memo_modify_insert_row">पंक्ति डालें</string>
+    <string name="memo_modify_remove_row">हटाना</string>
+    <string name="memo_modify_confirm">पूरा</string>
+    <string name="memo_create_confirm">पूरा</string>
+    <string name="memo_modify_cancel">रद्द करना</string>
+    <string name="dialog_cancel">रद्द करना</string>
+    <string name="dialog_memo_delete_cancel">रद्द करना</string>
+    <string name="memo_edit_cancel">रद्द करना</string>
+    <string name="memo_delete_confirm">मिटाना</string>
+    <string name="dialog_memo_delete_confirm">मिटाना</string>
+    <string name="dialog_delete">मिटाना</string>
+    <string name="memo_status_sum">जोड़</string>
+    <string name="memo_status_avg">औसत</string>
+    <string name="memo_status_max">मैक्स</string>
+    <string name="memo_status_min">मिनट</string>
+    <string name="memo_modify_toolbar_title">नोट संपादित करें</string>
+    <string name="memo_create_title_hint">कृपया एक शीर्षक दर्ज करें।</string>
+    <string name="memo_create_suffix">इकाई</string>
+    <string name="memo_create_title">शीर्षक</string>
+    <string name="memo_create_toolbar_title">नोट बनाएं</string>
+    <string name="memo_status_items">पंक्तियों</string>
+    <string name="dialog_memo_delete_title">क्या आप वाकई चयनित नोट्स हटाना चाहते हैं?</string>
+    <string name="memo_edit_guide">कृपया हटाने के लिए नोट चुनें</string>
+    <string name="search_memo_hint">नोट खोजें</string>
+    <string name="toolbar_title_main">नोट सूची</string>
+</resources>

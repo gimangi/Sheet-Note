@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">单行注释</string>
+    <string name="toolbar_title_main">笔记列表</string>
+    <string name="search_memo_hint">搜索笔记</string>
+    <string name="memo_edit_cancel">取消</string>
+    <string name="memo_delete_confirm">删除</string>
+    <string name="memo_edit_guide">请选择要删除的注释</string>
+    <string name="dialog_memo_delete_title">您确定要删除选定的笔记吗？</string>
+    <string name="dialog_memo_delete_confirm">删除</string>
+    <string name="dialog_delete">删除</string>
+    <string name="dialog_memo_delete_cancel">取消</string>
+    <string name="dialog_cancel">取消</string>
+    <string name="memo_status_items">行</string>
+    <string name="memo_modify_cancel">取消</string>
+    <string name="memo_create_confirm">完全的</string>
+    <string name="memo_modify_confirm">完全的</string>
+    <string name="memo_modify_remove_row">消除</string>
+    <string name="memo_modify_insert_row">插入行</string>
+    <string name="memo_status_min">分钟</string>
+    <string name="memo_status_max">最大限度</string>
+    <string name="memo_status_avg">平均</string>
+    <string name="memo_status_sum">和</string>
+    <string name="memo_modify_toolbar_title">编辑备注</string>
+    <string name="memo_create_suffix">单元</string>
+    <string name="memo_create_title">标题</string>
+    <string name="memo_create_toolbar_title">创建笔记</string>
+    <string name="memo_create_title_hint">请输入标题。</string>
+</resources>
