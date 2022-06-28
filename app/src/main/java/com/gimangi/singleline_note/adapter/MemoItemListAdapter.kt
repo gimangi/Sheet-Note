@@ -34,14 +34,14 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
 
     inner class MemoItemHolder(private val binding: ItemMemoItemsListBinding, private val context: Context) : RecyclerView.ViewHolder(binding.root) {
         val lineNum = ObservableField<Int>(0)
-        val selected = ObservableField<Boolean>()
+        lateinit var selected : ObservableField<Boolean>
 
         init {
 
             val etTouchListener = object : View.OnTouchListener {
                 override fun onTouch(view: View?, event: MotionEvent?): Boolean {
                     if (modifyMode.get() == true) {
-                        if (event?.action == MotionEvent.ACTION_DOWN) {
+                        if (event?.action == MotionEvent.ACTION_UP) {
                             val num = lineNum.get()
                             if (num != null)
                                 onClick(num)
@@ -65,7 +65,7 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
             binding.adapter = this@MemoItemListAdapter
             binding.viewHolder = this
             lineNum.set(data.number)
-            selected.set(sData.selected)
+            selected = sData.selected
 
             // focus 해제 시 자동 저장
             val autoSaveListener =
@@ -78,10 +78,16 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
 
             binding.etMemoItemName.onFocusChangeListener = autoSaveListener
             binding.etMemoItemValue.onFocusChangeListener = autoSaveListener
-
         }
 
         fun onClick(rowNum: Int) {
+            val list = dataList.filter {
+                it.data.number == rowNum
+            }
+            if (list != null && list.isNotEmpty()) {
+                list[0].selected.set(!list[0].selected.get()!!)
+                Log.d("test", "${list[0]}")
+            }
             Log.d("test", "$rowNum clicked")
         }
     }
@@ -111,7 +117,7 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
         this.dataList = dataList.map {
             Selectable(
                 data = it,
-                selected = false
+                selected = ObservableField(false)
             )
         } as MutableList<Selectable<MemoItemData>>
         notifyDataSetChanged()
