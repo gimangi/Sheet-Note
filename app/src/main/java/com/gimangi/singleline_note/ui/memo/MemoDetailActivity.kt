@@ -88,6 +88,10 @@ class MemoDetailActivity :
                 memoItemListAdapter.setDataList(list)
             }
         }
+
+        memoItemListAdapter.selectCount.observe(this) {
+            binding.btnInsertRow.isEnabled = it == 1
+        }
     }
 
     private fun getIntentData() {
@@ -150,6 +154,13 @@ class MemoDetailActivity :
         binding.btnModifyComplete.setOnClickListener {
             memoItemListAdapter.modifyMode.set(false)
         }
+
+        // 메모 행 삽입
+        binding.btnInsertRow.setOnClickListener {
+
+        }
+
+        // 메모 행 삭제
 
     }
 

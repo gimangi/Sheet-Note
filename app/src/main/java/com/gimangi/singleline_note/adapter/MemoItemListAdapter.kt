@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gimangi.singleline_note.data.model.MemoItemData
 import com.gimangi.singleline_note.data.model.Selectable
 import com.gimangi.singleline_note.databinding.ItemMemoItemsListBinding
-import com.gimangi.singleline_note.databinding.ItemMemoListBinding
 import java.text.DecimalFormat
 import java.util.*
 
@@ -30,6 +29,12 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
     val changedData : LiveData<MemoItemData>
         get() = _changedData
 
+    // 선택된 행 개수
+    private var _selectCount = MutableLiveData(0)
+    val selectCount: LiveData<Int>
+        get() = _selectCount
+
+    // 행 편집 모드
     override val modifyMode = ObservableField(false)
 
     inner class MemoItemHolder(private val binding: ItemMemoItemsListBinding, private val context: Context) : RecyclerView.ViewHolder(binding.root) {
@@ -86,9 +91,11 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
             }
             if (list != null && list.isNotEmpty()) {
                 list[0].selected.set(!list[0].selected.get()!!)
-                Log.d("test", "${list[0]}")
+                if (list[0].selected.get() == true)
+                    _selectCount.postValue(_selectCount.value!! + 1)
+                else
+                    _selectCount.postValue(_selectCount.value!! - 1)
             }
-            Log.d("test", "$rowNum clicked")
         }
     }
 
