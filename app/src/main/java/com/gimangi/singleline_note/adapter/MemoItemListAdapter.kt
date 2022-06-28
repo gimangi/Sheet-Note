@@ -34,6 +34,9 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
     val selectCount: LiveData<Int>
         get() = _selectCount
 
+    // 최근 선택된 행
+    private var selectedRow: Selectable<MemoItemData>? = null
+
     // 행 편집 모드
     override val modifyMode = ObservableField(false)
 
@@ -91,8 +94,12 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
             }
             if (list != null && list.isNotEmpty()) {
                 list[0].selected.set(!list[0].selected.get()!!)
-                if (list[0].selected.get() == true)
+                if (list[0].selected.get() == true) {
                     _selectCount.postValue(_selectCount.value!! + 1)
+                    selectedRow = dataList.filter {
+                        it.data.number == rowNum
+                    }[0]
+                }
                 else
                     _selectCount.postValue(_selectCount.value!! - 1)
             }
@@ -233,8 +240,6 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         Collections.swap(dataList, fromPosition, toPosition)
-        Log.d("bug fix-1", "${dataList[fromPosition]} $fromPosition -> $toPosition ${dataList[toPosition]}")
-        Log.d("bug fix-2", dataList.toString())
         notifyItemMoved(fromPosition, toPosition)
         return true
     }
@@ -244,10 +249,9 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
 
     override fun afterDragAndDrop() {
         realign()
-        notifyDataSetChanged()
     }
 
-    private fun realign() {
+    fun realign() {
         for (i in 0 until dataList.size) {
             val data = dataList[i].data
             data.number = i+1
@@ -257,6 +261,13 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
             val data = d.data
             autoSave(data, data.name, data.value)
         }
+        notifyDataSetChanged()
+    }
+
+    fun selectedPos(): Int {
+        if (selectedRow == null)
+            return -1
+        return dataList.indexOf(selectedRow)
     }
 
 }

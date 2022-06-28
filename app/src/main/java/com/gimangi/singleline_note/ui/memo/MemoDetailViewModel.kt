@@ -38,6 +38,14 @@ class MemoDetailViewModel : ViewModel() {
         return res
     }
 
+    fun insertMemoItemAt(index: Int, table: MemoTableEntity, item: MemoItemEntity): MutableLiveData<MemoTableEntity> {
+        val res = MutableLiveData<MemoTableEntity>()
+        CoroutineScope(Dispatchers.IO).launch {
+            res.postValue(RoomUtil.insertMemoItemAt(index, table, item))
+        }
+        return res
+    }
+
     fun updateMemoTable(table: MemoTableEntity): MutableLiveData<MemoTableEntity> {
         val res = MutableLiveData<MemoTableEntity>()
         CoroutineScope(Dispatchers.IO).launch {
