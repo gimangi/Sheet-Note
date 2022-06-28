@@ -40,4 +40,12 @@
     <string name="memo_modify_cancel">cancel</string>
     <string name="memo_status_items">rows</string>
 
+    <!-- admob -->
+    <string name="admob_app_id" translatable="false">ca-app-pub-2460925649047408~7202345125</string>
+    <string name="admob_banner_id" translatable="false">ca-app-pub-2460925649047408/5889263458</string>
+    <string name="admob_front_id" translatable="false">ca-app-pub-2460925649047408/6441859426</string>
+    <!-- admob test -->
+    <string name="admob_banner_test_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="admob_front_test_id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
+
 </resources>

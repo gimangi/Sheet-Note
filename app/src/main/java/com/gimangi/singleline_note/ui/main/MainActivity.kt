@@ -13,6 +13,9 @@ import com.gimangi.singleline_note.ui.base.BaseActivity
 import com.gimangi.singleline_note.ui.memo.MemoCreateActivity
 import com.gimangi.singleline_note.ui.memo.MemoDetailActivity
 import com.gimangi.singleline_note.ui.shared.SlnGenericDialog
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -161,6 +164,13 @@ class MainActivity() :
 
     private fun switchEditMode(flag: Boolean) {
         mainViewModel.isEditMode.set(flag)
+    }
+
+    override fun initAdmob() {
+        MobileAds.initialize(this) {}
+        mAdView = binding.adViewBanner
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
     }
 
 }

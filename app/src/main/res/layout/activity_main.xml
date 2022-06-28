@@ -78,9 +78,18 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="vertical"
             tools:listitem="@layout/item_memo_list"
-            android:layout_marginVertical="18dp"
-            app:layout_constraintBottom_toTopOf="@+id/cl_search_box_main"
+            android:layout_marginTop="18dp"
+            app:layout_constraintBottom_toTopOf="@+id/adView_banner"
             app:layout_constraintTop_toBottomOf="@id/cl_toolbar_main" />
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView_banner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:adSize="BANNER"
+            app:adUnitId="@string/admob_banner_test_id"
+            app:layout_constraintBottom_toTopOf="@+id/cl_search_box_main">
+        </com.google.android.gms.ads.AdView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_search_box_main"

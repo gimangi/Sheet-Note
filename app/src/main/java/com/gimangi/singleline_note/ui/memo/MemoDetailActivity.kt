@@ -25,6 +25,8 @@ import com.gimangi.singleline_note.ui.shared.SlnDropDown
 import com.gimangi.singleline_note.ui.shared.showDropDown
 import com.gimangi.singleline_note.util.NumeralUtil
 import com.gimangi.singleline_note.util.dpToPx
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.DecimalFormat
 
@@ -331,5 +333,12 @@ class MemoDetailActivity :
         }
 
         return tableEntity
+    }
+
+    override fun initAdmob() {
+        MobileAds.initialize(this) {}
+        mAdView = binding.adViewBanner
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
     }
 }

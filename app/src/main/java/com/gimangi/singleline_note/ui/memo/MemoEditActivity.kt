@@ -7,6 +7,8 @@ import android.util.Log
 import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.databinding.ActivityMemoCreateBinding
 import com.gimangi.singleline_note.ui.base.BaseActivity
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MemoEditActivity :
@@ -68,5 +70,12 @@ class MemoEditActivity :
             )
             finish()
         }
+    }
+
+    override fun initAdmob() {
+        MobileAds.initialize(this) {}
+        mAdView = binding.adViewBanner
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
     }
 }
