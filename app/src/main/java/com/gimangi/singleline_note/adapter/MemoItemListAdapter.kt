@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
@@ -20,7 +21,8 @@ import com.gimangi.singleline_note.databinding.ItemMemoListBinding
 import java.text.DecimalFormat
 import java.util.*
 
-class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHolder>(), ItemTouchHelperListener {
+class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHolder>(),
+    ItemTouchHelperListener {
     private var dataList = mutableListOf<Selectable<MemoItemData>>()
 
     // 변경된 아이템 자동저장을 위한 Observable
@@ -32,12 +34,38 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
 
     inner class MemoItemHolder(private val binding: ItemMemoItemsListBinding, private val context: Context) : RecyclerView.ViewHolder(binding.root) {
         val lineNum = ObservableField<Int>(0)
+        val selected = ObservableField<Boolean>()
 
-        fun onBind(data: MemoItemData) {
+        init {
+
+            val etTouchListener = object : View.OnTouchListener {
+                override fun onTouch(view: View?, event: MotionEvent?): Boolean {
+                    if (modifyMode.get() == true) {
+                        if (event?.action == MotionEvent.ACTION_DOWN) {
+                            val num = lineNum.get()
+                            if (num != null)
+                                onClick(num)
+                        }
+                        return true
+                    }
+                    return false
+                }
+
+            }
+
+            binding.etMemoItemName.setOnTouchListener (etTouchListener)
+
+            binding.etMemoItemValue.setOnTouchListener (etTouchListener)
+        }
+
+        fun onBind(sData: Selectable<MemoItemData>) {
+            val data = sData.data
+
             binding.item = data
             binding.adapter = this@MemoItemListAdapter
             binding.viewHolder = this
             lineNum.set(data.number)
+            selected.set(sData.selected)
 
             // focus 해제 시 자동 저장
             val autoSaveListener =
@@ -45,11 +73,16 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
                     if (!b)
                         autoSave(data,
                             binding.etMemoItemName.text.toString(),
-                            binding.etMemoItemValue.text.toString()) }
+                            binding.etMemoItemValue.text.toString())
+                }
 
             binding.etMemoItemName.onFocusChangeListener = autoSaveListener
             binding.etMemoItemValue.onFocusChangeListener = autoSaveListener
 
+        }
+
+        fun onClick(rowNum: Int) {
+            Log.d("test", "$rowNum clicked")
         }
     }
 
@@ -67,7 +100,7 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
     }
 
     override fun onBindViewHolder(holder: MemoItemHolder, position: Int) {
-        holder.onBind(dataList[position].data)
+        holder.onBind(dataList[position])
     }
 
     override fun getItemCount(): Int = dataList.size
@@ -183,7 +216,6 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
                 listener.afterDragAndDrop()
             }
         }
-
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {

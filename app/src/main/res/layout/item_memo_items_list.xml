@@ -17,7 +17,8 @@
     <LinearLayout
         android:id="@+id/ll_memo_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{()->viewHolder.onClick(viewHolder.lineNum)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_memo_item_number"
@@ -68,6 +69,13 @@
             setEvenRowColor="@{viewHolder.lineNum}"
             android:layout_weight="9">
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/dark_select"
+                setGone="@{viewHolder.selected}"
+                tools:visibility="gone" />
+
             <EditText
                 android:id="@+id/et_memo_item_name"
                 android:layout_width="match_parent"
@@ -76,7 +84,6 @@
                 android:textFontWeight="400"
                 android:textColor="@color/black"
                 android:textSize="10sp"
-                android:enabled="@{!adapter.modifyMode}"
                 android:includeFontPadding="false"
                 android:paddingStart="15dp"
                 android:background="@android:color/transparent"
@@ -101,6 +108,13 @@
             setEvenRowColor="@{viewHolder.lineNum}"
             android:layout_weight="9">
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/dark_select"
+                setGone="@{viewHolder.selected}"
+                tools:visibility="gone" />
+
             <EditText
                 android:id="@+id/et_memo_item_value"
                 setTextLong="@{item.value}"
@@ -115,7 +129,6 @@
                 android:textColor="@color/black"
                 android:textFontWeight="400"
                 android:textSize="10sp"
-                android:enabled="@{!adapter.modifyMode}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

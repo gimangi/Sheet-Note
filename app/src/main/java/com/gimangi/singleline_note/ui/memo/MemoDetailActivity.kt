@@ -143,6 +143,7 @@ class MemoDetailActivity :
         // 메모 행 편집
         binding.ibEditMemoList.setOnClickListener {
             memoItemListAdapter.modifyMode.set(true)
+            binding.root.clearFocus()
         }
 
         // 메모 행 편집 완료
