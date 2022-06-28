@@ -1,11 +1,9 @@
 package com.gimangi.singleline_note.util
 
-import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.data.database.dto.MemoItemEntity
 import com.gimangi.singleline_note.data.database.dto.MemoStatus
 import com.gimangi.singleline_note.data.database.dto.MemoTableEntity
 import com.gimangi.singleline_note.data.database.room.MemoDatabase
-import com.gimangi.singleline_note.data.model.MemoItemData
 import com.gimangi.singleline_note.di.SlnApplication
 import java.util.*
 

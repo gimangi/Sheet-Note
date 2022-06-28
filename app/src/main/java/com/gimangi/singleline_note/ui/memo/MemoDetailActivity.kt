@@ -4,7 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.TextView
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.adapter.MemoItemListAdapter
 import com.gimangi.singleline_note.data.database.dto.MemoItemEntity
@@ -12,7 +14,7 @@ import com.gimangi.singleline_note.data.database.dto.MemoStatus
 import com.gimangi.singleline_note.data.database.dto.getStatusString
 import com.gimangi.singleline_note.data.mapper.MemoDataMapper
 import com.gimangi.singleline_note.data.model.MemoItemData
-import com.gimangi.singleline_note.data.model.SelectableData
+import com.gimangi.singleline_note.data.model.DropdownItem
 import com.gimangi.singleline_note.databinding.ActivityMemoDetailBinding
 import com.gimangi.singleline_note.ui.base.BaseActivity
 import com.gimangi.singleline_note.ui.shared.SlnDropDown
@@ -28,6 +30,7 @@ class MemoDetailActivity :
     private val memoDetailViewModel: MemoDetailViewModel by viewModel()
 
     private lateinit var memoItemListAdapter: MemoItemListAdapter
+    private lateinit var memoItemHelper: ItemTouchHelper
 
     private var dropdown: SlnDropDown? = null
 
@@ -42,9 +45,9 @@ class MemoDetailActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        initMemoListAdapter()
         initBinding()
         observeMemoData()
-        initMemoListAdapter()
         getIntentData()
         loadData()
         initClickListener()
@@ -64,6 +67,7 @@ class MemoDetailActivity :
 
     private fun initBinding() {
         binding.viewModel = memoDetailViewModel
+        binding.adapter = memoItemListAdapter
     }
 
     private fun observeMemoData() {
@@ -99,6 +103,8 @@ class MemoDetailActivity :
 
     private fun initMemoListAdapter() {
         memoItemListAdapter = MemoItemListAdapter()
+        memoItemHelper = ItemTouchHelper(MemoItemListAdapter.MemoItemTouchHelperCallback(memoItemListAdapter))
+        memoItemHelper.attachToRecyclerView(binding.rvMemoItemList)
         binding.rvMemoItemList.adapter = memoItemListAdapter
 
         // focus 해제된 item -> 자동저장
@@ -136,7 +142,12 @@ class MemoDetailActivity :
 
         // 메모 행 편집
         binding.ibEditMemoList.setOnClickListener {
+            memoItemListAdapter.modifyMode.set(true)
+        }
 
+        // 메모 행 편집 완료
+        binding.btnModifyComplete.setOnClickListener {
+            memoItemListAdapter.modifyMode.set(false)
         }
 
     }
@@ -170,6 +181,7 @@ class MemoDetailActivity :
 
             memoDetailViewModel.memoTableData.value?.summary = summary
             memoDetailViewModel.summary.set(summary)
+            memoDetailViewModel.updateMemoTable(memoDetailViewModel.memoTableData.value!!)
         }
     }
 
@@ -196,11 +208,11 @@ class MemoDetailActivity :
             dropdown!!.dismiss()
         }
 
-        val dropdownList = mutableListOf<SelectableData>()
+        val dropdownList = mutableListOf<DropdownItem>()
 
         for (i in SUMMARY_LIST.indices) {
             dropdownList.add(
-                SelectableData(i, getString(SUMMARY_LIST[i]), false)
+                DropdownItem(i, getString(SUMMARY_LIST[i]), false)
             )
         }
 

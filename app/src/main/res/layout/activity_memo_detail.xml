@@ -6,7 +6,9 @@
         <variable
             name="viewModel"
             type="com.gimangi.singleline_note.ui.memo.MemoDetailViewModel" />
-
+        <variable
+            name="adapter"
+            type="com.gimangi.singleline_note.adapter.MemoItemListAdapter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -59,7 +61,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="18dp"
                 android:src="@drawable/ic_edit_file"
-                android:background="@android:color/transparent" />
+                android:background="@android:color/transparent"
+                setVisible="@{!adapter.modifyMode}"/>
 
             <ImageButton
                 android:id="@+id/ib_edit_memo_list"
@@ -70,7 +73,26 @@
                 app:layout_constraintEnd_toStartOf="@id/ib_edit_memo_define"
                 android:background="@android:color/transparent"
                 android:layout_marginEnd="18dp"
-                android:src="@drawable/ic_edit" />
+                android:src="@drawable/ic_edit"
+                setVisible="@{!adapter.modifyMode}"/>
+
+            <TextView
+                android:id="@+id/btn_modify_complete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="18dp"
+                android:text="@string/memo_modify_confirm"
+                setVisible="@{adapter.modifyMode}"
+                android:textSize="12sp"
+                android:fontFamily="@font/noto_sans_kr"
+                android:includeFontPadding="false"
+                android:textFontWeight="500"
+                android:textColor="@color/white"
+                tools:visibility="invisible"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -181,6 +203,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/gray2"
+                    setVisible="@{!adapter.modifyMode}"
                     app:layout_constraintTop_toBottomOf="@id/rv_memo_item_list">
 
                     <ImageView
@@ -199,6 +222,48 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_edit_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="15dp"
+            setGone="@{adapter.modifyMode}"
+            tools:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@color/main">
+
+            <TextView
+                android:id="@+id/btn_add_row"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="@string/memo_modify_insert_row"
+                android:fontFamily="@font/noto_sans_kr"
+                android:textFontWeight="500"
+                android:textSize="12sp"
+                android:includeFontPadding="false"
+                setButtonEnable="@{}"
+                android:layout_marginStart="25dp"/>
+
+            <TextView
+                android:id="@+id/btn_remove_row"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/noto_sans_kr"
+                android:includeFontPadding="false"
+                android:text="@string/memo_modify_remove_row"
+                android:textColor="@color/red"
+                android:textFontWeight="500"
+                android:textSize="12sp"
+                android:layout_marginEnd="25dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -4,11 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
+            name="viewHolder"
+            type="com.gimangi.singleline_note.adapter.MemoItemListAdapter.MemoItemHolder" />
+        <variable
             name="item"
             type="com.gimangi.singleline_note.data.model.MemoItemData" />
+        <variable
+            name="adapter"
+            type="com.gimangi.singleline_note.adapter.MemoItemListAdapter" />
     </data>
 
     <LinearLayout
+        android:id="@+id/ll_memo_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -19,6 +26,20 @@
             android:background="@color/main_background"
             android:layout_weight="1">
 
+            <ImageView
+                android:id="@+id/iv_movable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_grabber"
+                setVisible="@{adapter.modifyMode}"
+                tools:visibility="invisible"
+                />
+
             <TextView
                 android:id="@+id/tv_memo_item_number"
                 android:layout_width="wrap_content"
@@ -28,12 +49,13 @@
                 android:textSize="10sp"
                 android:includeFontPadding="false"
                 android:textColor="@color/white"
-                setTextInt="@{item.number}"
+                setTextInt="@{viewHolder.lineNum}"
                 android:layout_marginVertical="11dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                setVisible="@{!adapter.modifyMode}"
                 tools:text="1" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -43,7 +65,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             tools:background="@color/white"
-            setEvenRowColor="@{item.number}"
+            setEvenRowColor="@{viewHolder.lineNum}"
             android:layout_weight="9">
 
             <EditText
@@ -54,6 +76,7 @@
                 android:textFontWeight="400"
                 android:textColor="@color/black"
                 android:textSize="10sp"
+                android:enabled="@{!adapter.modifyMode}"
                 android:includeFontPadding="false"
                 android:paddingStart="15dp"
                 android:background="@android:color/transparent"
@@ -75,13 +98,13 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             tools:background="@color/white"
-            setEvenRowColor="@{item.number}"
+            setEvenRowColor="@{viewHolder.lineNum}"
             android:layout_weight="9">
 
             <EditText
                 android:id="@+id/et_memo_item_value"
                 setTextLong="@{item.value}"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/noto_sans_kr"
@@ -92,7 +115,9 @@
                 android:textColor="@color/black"
                 android:textFontWeight="400"
                 android:textSize="10sp"
+                android:enabled="@{!adapter.modifyMode}"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="5,500" />
