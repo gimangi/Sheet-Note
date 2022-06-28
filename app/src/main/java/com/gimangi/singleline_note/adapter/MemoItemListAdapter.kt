@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
@@ -16,11 +17,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gimangi.singleline_note.data.model.MemoItemData
 import com.gimangi.singleline_note.data.model.Selectable
 import com.gimangi.singleline_note.databinding.ItemMemoItemsListBinding
-import com.gimangi.singleline_note.databinding.ItemMemoListBinding
 import java.text.DecimalFormat
 import java.util.*
 
-class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHolder>(), ItemTouchHelperListener {
+class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHolder>(),
+    ItemTouchHelperListener {
     private var dataList = mutableListOf<Selectable<MemoItemData>>()
 
     // 변경된 아이템 자동저장을 위한 Observable
@@ -28,16 +29,51 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
     val changedData : LiveData<MemoItemData>
         get() = _changedData
 
+    // 선택된 행 개수
+    private var _selectCount = MutableLiveData(0)
+    val selectCount: LiveData<Int>
+        get() = _selectCount
+
+    // 최근 선택된 행
+    private var selectedRow: Selectable<MemoItemData>? = null
+
+    // 행 편집 모드
     override val modifyMode = ObservableField(false)
 
     inner class MemoItemHolder(private val binding: ItemMemoItemsListBinding, private val context: Context) : RecyclerView.ViewHolder(binding.root) {
         val lineNum = ObservableField<Int>(0)
+        lateinit var selected : ObservableField<Boolean>
 
-        fun onBind(data: MemoItemData) {
+        init {
+
+            val etTouchListener = object : View.OnTouchListener {
+                override fun onTouch(view: View?, event: MotionEvent?): Boolean {
+                    if (modifyMode.get() == true) {
+                        if (event?.action == MotionEvent.ACTION_UP) {
+                            val num = lineNum.get()
+                            if (num != null)
+                                onClick(num)
+                        }
+                        return true
+                    }
+                    return false
+                }
+
+            }
+
+            binding.etMemoItemName.setOnTouchListener (etTouchListener)
+
+            binding.etMemoItemValue.setOnTouchListener (etTouchListener)
+        }
+
+        fun onBind(sData: Selectable<MemoItemData>) {
+            val data = sData.data
+
             binding.item = data
             binding.adapter = this@MemoItemListAdapter
             binding.viewHolder = this
             lineNum.set(data.number)
+            selected = sData.selected
 
             // focus 해제 시 자동 저장
             val autoSaveListener =
@@ -45,11 +81,28 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
                     if (!b)
                         autoSave(data,
                             binding.etMemoItemName.text.toString(),
-                            binding.etMemoItemValue.text.toString()) }
+                            binding.etMemoItemValue.text.toString())
+                }
 
             binding.etMemoItemName.onFocusChangeListener = autoSaveListener
             binding.etMemoItemValue.onFocusChangeListener = autoSaveListener
+        }
 
+        fun onClick(rowNum: Int) {
+            val list = dataList.filter {
+                it.data.number == rowNum
+            }
+            if (list != null && list.isNotEmpty()) {
+                list[0].selected.set(!list[0].selected.get()!!)
+                if (list[0].selected.get() == true) {
+                    _selectCount.postValue(_selectCount.value!! + 1)
+                    selectedRow = dataList.filter {
+                        it.data.number == rowNum
+                    }[0]
+                }
+                else
+                    _selectCount.postValue(_selectCount.value!! - 1)
+            }
         }
     }
 
@@ -67,7 +120,7 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
     }
 
     override fun onBindViewHolder(holder: MemoItemHolder, position: Int) {
-        holder.onBind(dataList[position].data)
+        holder.onBind(dataList[position])
     }
 
     override fun getItemCount(): Int = dataList.size
@@ -78,7 +131,7 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
         this.dataList = dataList.map {
             Selectable(
                 data = it,
-                selected = false
+                selected = ObservableField(false)
             )
         } as MutableList<Selectable<MemoItemData>>
         notifyDataSetChanged()
@@ -183,13 +236,10 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
                 listener.afterDragAndDrop()
             }
         }
-
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         Collections.swap(dataList, fromPosition, toPosition)
-        Log.d("bug fix-1", "${dataList[fromPosition]} $fromPosition -> $toPosition ${dataList[toPosition]}")
-        Log.d("bug fix-2", dataList.toString())
         notifyItemMoved(fromPosition, toPosition)
         return true
     }
@@ -199,7 +249,6 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
 
     override fun afterDragAndDrop() {
         realign()
-        notifyDataSetChanged()
     }
 
     private fun realign() {
@@ -212,6 +261,28 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
             val data = d.data
             autoSave(data, data.name, data.value)
         }
+        notifyDataSetChanged()
+    }
+
+    fun selectedPos(): Int {
+        if (selectedRow == null)
+            return -1
+        return dataList.indexOf(selectedRow)
+    }
+
+    fun selectedItems(): List<MemoItemData> {
+        return dataList.filter {
+            it.selected.get() == true
+        }.map {
+            it.data
+        }
+    }
+
+    fun clearSelected() {
+        selectedRow = null
+        _selectCount.value = 0
+        for (d in dataList)
+            d.selected.set(false)
     }
 
 }

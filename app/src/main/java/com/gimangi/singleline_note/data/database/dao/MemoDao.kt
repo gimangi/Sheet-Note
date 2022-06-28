@@ -25,11 +25,14 @@ abstract class MemoDao {
     abstract suspend fun updateMemoTable(memoTableEntity: MemoTableEntity): Int
 
     @Transaction
-    open suspend fun addMemoItem(memoTableEntity: MemoTableEntity, memoItemEntity: MemoItemEntity): MemoTableEntity {
+    open suspend fun addMemoItem(index: Int?, memoTableEntity: MemoTableEntity, memoItemEntity: MemoItemEntity): MemoTableEntity {
         updateMemoTable(
             memoTableEntity.apply {
                 updatedAt = Date()
-                rowList.add(memoItemEntity)
+                if (index == null)
+                    rowList.add(memoItemEntity)
+                else
+                    rowList.add(index, memoItemEntity)
             }
         )
         return memoTableEntity

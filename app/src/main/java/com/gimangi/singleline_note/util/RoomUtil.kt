@@ -38,7 +38,11 @@ object RoomUtil {
     }
 
     suspend fun insertMemoItem(table: MemoTableEntity, item: MemoItemEntity): MemoTableEntity {
-        return dao.addMemoItem(table, item)
+        return dao.addMemoItem(null, table, item)
+    }
+
+    suspend fun insertMemoItemAt(index: Int, table: MemoTableEntity, item: MemoItemEntity): MemoTableEntity {
+        return dao.addMemoItem(index, table, item)
     }
 
     suspend fun updateMemo(tableEntity: MemoTableEntity): MemoTableEntity {

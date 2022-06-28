@@ -1,16 +1,20 @@
 package com.gimangi.singleline_note.ui.memo
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.adapter.MemoItemListAdapter
 import com.gimangi.singleline_note.data.database.dto.MemoItemEntity
 import com.gimangi.singleline_note.data.database.dto.MemoStatus
+import com.gimangi.singleline_note.data.database.dto.MemoTableEntity
 import com.gimangi.singleline_note.data.database.dto.getStatusString
 import com.gimangi.singleline_note.data.mapper.MemoDataMapper
 import com.gimangi.singleline_note.data.model.MemoItemData
@@ -88,6 +92,10 @@ class MemoDetailActivity :
                 memoItemListAdapter.setDataList(list)
             }
         }
+
+        memoItemListAdapter.selectCount.observe(this) {
+            binding.btnInsertRow.isEnabled = it == 1
+        }
     }
 
     private fun getIntentData() {
@@ -105,6 +113,10 @@ class MemoDetailActivity :
         memoItemListAdapter = MemoItemListAdapter()
         memoItemHelper = ItemTouchHelper(MemoItemListAdapter.MemoItemTouchHelperCallback(memoItemListAdapter))
         memoItemHelper.attachToRecyclerView(binding.rvMemoItemList)
+        val animator = binding.rvMemoItemList.itemAnimator as DefaultItemAnimator
+        animator.supportsChangeAnimations = false
+        animator.changeDuration = 0
+
         binding.rvMemoItemList.adapter = memoItemListAdapter
 
         // focus 해제된 item -> 자동저장
@@ -143,11 +155,26 @@ class MemoDetailActivity :
         // 메모 행 편집
         binding.ibEditMemoList.setOnClickListener {
             memoItemListAdapter.modifyMode.set(true)
+            val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+            currentFocus?.clearFocus()
         }
 
         // 메모 행 편집 완료
         binding.btnModifyComplete.setOnClickListener {
             memoItemListAdapter.modifyMode.set(false)
+        }
+
+        // 메모 행 삽입
+        binding.btnInsertRow.setOnClickListener {
+            val selectedPos = memoItemListAdapter.selectedPos()
+            memoItemListAdapter.clearSelected()
+            insertMemoRowAt(selectedPos+1)
+        }
+
+        // 메모 행 삭제
+        binding.btnRemoveRow.setOnClickListener {
+            removeRows()
         }
 
     }
@@ -186,20 +213,45 @@ class MemoDetailActivity :
     }
 
     private fun addMemoRow() {
+        insertMemoRowAt(null)
+    }
+
+    private fun removeRows() {
+        val removeList = memoItemListAdapter.selectedItems()
+        memoItemListAdapter.clearSelected()
+
+        val table = memoDetailViewModel.memoTableData.value
+        if (table != null) {
+            val rowList = table.rowList
+            for (r in removeList) {
+                rowList.remove(
+                    rowList.filter {
+                        it.order == r.number
+                    }[0]
+                )
+            }
+            val resultTable = realignTableItem(table)
+            memoDetailViewModel.memoTableData.postValue(resultTable)
+            memoDetailViewModel.updateMemoTable(resultTable)
+        }
+    }
+
+    private fun insertMemoRowAt(index: Int?) {
         val table = memoDetailViewModel.memoTableData.value
 
         if (table != null) {
-            val newRow = MemoItemEntity(
-                order = table.rowList.size + 1,
-                item = "",
-                value = 0,
-                tableId = table.memoId
-            )
+            val row = newRow(table)
 
-            memoDetailViewModel.insertMemoItem(table, newRow).observe(this) {
-                if (it != null)
-                    memoDetailViewModel.memoTableData.value = it
+            if (index == null)
+                memoDetailViewModel.insertMemoItem(table, row).observe(this) {
+                    if (it != null)
+                        memoDetailViewModel.memoTableData.value = it
             }
+            else
+                memoDetailViewModel.insertMemoItemAt(index, table, row).observe(this) {
+                    if (it != null)
+                        memoDetailViewModel.memoTableData.value = realignTableItem(it)
+                }
         }
     }
 
@@ -263,5 +315,21 @@ class MemoDetailActivity :
         override fun afterTextChanged(s: Editable?) {
         }
 
+    }
+
+    private fun newRow(table: MemoTableEntity): MemoItemEntity = MemoItemEntity(
+        order = table.rowList.size + 1,
+        item = "",
+        value = 0,
+        tableId = table.memoId
+    )
+
+    private fun realignTableItem(tableEntity: MemoTableEntity): MemoTableEntity {
+        val list = tableEntity.rowList
+        for (i in 0 until list.size) {
+            list[i].order = i+1
+        }
+
+        return tableEntity
     }
 }
