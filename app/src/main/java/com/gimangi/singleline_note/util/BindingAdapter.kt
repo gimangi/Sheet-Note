@@ -24,7 +24,7 @@ object BindingAdapter {
     @BindingAdapter("dateToText")
     fun getTextFromDate(textView: TextView, date: Date?) {
         if (date != null) {
-            textView.text = SimpleDateFormat("yyyy.MM.dd (E)").format(date)
+            textView.text = SimpleDateFormat("yyyy.MM.dd (E)", Locale.getDefault()).format(date)
         } else {
             Log.d(TAG, "date is null")
         }

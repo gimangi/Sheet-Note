@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SingleLine-Note</string>
+    <string name="toolbar_title_main">전체 메모</string>
+    <string name="search_memo_hint">검색할 내용</string>
+    <string name="memo_edit_cancel">취소</string>
+    <string name="memo_delete_confirm">삭제</string>
+    <string name="memo_edit_guide">삭제할 메모를 선택해주세요</string>
+    <string name="dialog_memo_delete_title">선택된 메모를 삭제하시겠습니까?</string>
+    <string name="dialog_memo_delete_confirm">삭제</string>
+    <string name="dialog_memo_delete_cancel">취소</string>
+    <string name="memo_status_items">항목</string>
+    <string name="memo_create_toolbar_title">새로운 메모</string>
+    <string name="memo_create_confirm">완료</string>
+    <string name="memo_create_title">제목</string>
+    <string name="memo_create_suffix">단위</string>
+    <string name="memo_create_title_hint">제목을 입력해주세요.</string>
+    <string name="memo_modify_toolbar_title">메모 편집</string>
+    <string name="dialog_cancel">취소</string>
+    <string name="dialog_delete">삭제</string>
+    <string name="memo_status_sum">합계</string>
+    <string name="memo_status_avg">평균</string>
+    <string name="memo_status_max">최댓값</string>
+    <string name="memo_status_min">최솟값</string>
+    <string name="memo_modify_insert_row">행 삽입</string>
+    <string name="memo_modify_remove_row">삭제</string>
+    <string name="memo_modify_confirm">완료</string>
+    <string name="memo_modify_cancel">취소</string>
+</resources>

@@ -57,12 +57,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <!--setVisible="@{!viewModel.isEditMode}"-->
             <ImageButton
                 android:id="@+id/btn_toolbar_main_setting"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:background="@drawable/ic_settings"
-                setVisible="@{!viewModel.isEditMode}"
+                android:visibility="gone"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
