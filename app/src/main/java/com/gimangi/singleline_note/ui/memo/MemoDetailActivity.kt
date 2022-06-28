@@ -180,6 +180,7 @@ class MemoDetailActivity :
 
         // 메모 행 편집 완료
         binding.btnModifyComplete.setOnClickListener {
+            memoItemListAdapter.clearSelected()
             memoItemListAdapter.modifyMode.set(false)
         }
 
