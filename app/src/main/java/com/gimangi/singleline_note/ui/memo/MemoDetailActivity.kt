@@ -168,10 +168,9 @@ class MemoDetailActivity :
 
         // 메모 행 삽입
         binding.btnInsertRow.setOnClickListener {
-            Log.d("test", memoItemListAdapter.selectedPos().toString())
             val selectedPos = memoItemListAdapter.selectedPos()
             memoItemListAdapter.clearSelected()
-            insertMemoRowAt(1)
+            insertMemoRowAt(selectedPos+1)
         }
 
         // 메모 행 삭제
