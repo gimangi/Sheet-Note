@@ -8,7 +8,9 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.adapter.MemoItemListAdapter
 import com.gimangi.singleline_note.data.database.dto.MemoItemEntity
@@ -112,6 +114,10 @@ class MemoDetailActivity :
         memoItemListAdapter = MemoItemListAdapter()
         memoItemHelper = ItemTouchHelper(MemoItemListAdapter.MemoItemTouchHelperCallback(memoItemListAdapter))
         memoItemHelper.attachToRecyclerView(binding.rvMemoItemList)
+        val animator = binding.rvMemoItemList.itemAnimator as DefaultItemAnimator
+        animator.supportsChangeAnimations = false
+        animator.changeDuration = 0
+
         binding.rvMemoItemList.adapter = memoItemListAdapter
 
         // focus 해제된 item -> 자동저장
@@ -163,8 +169,9 @@ class MemoDetailActivity :
         // 메모 행 삽입
         binding.btnInsertRow.setOnClickListener {
             Log.d("test", memoItemListAdapter.selectedPos().toString())
+            val selectedPos = memoItemListAdapter.selectedPos()
+            memoItemListAdapter.clearSelected()
             insertMemoRowAt(1)
-            //memoItemListAdapter.realign()
         }
 
         // 메모 행 삭제
@@ -216,13 +223,19 @@ class MemoDetailActivity :
 
             if (index == null)
                 memoDetailViewModel.insertMemoItem(table, row).observe(this) {
-                if (it != null)
-                    memoDetailViewModel.memoTableData.value = it
+                    if (it != null)
+                        memoDetailViewModel.memoTableData.value = it
             }
             else
                 memoDetailViewModel.insertMemoItemAt(index, table, row).observe(this) {
-                if (it != null)
-                    memoDetailViewModel.memoTableData.value = it
+                    if (it != null) {
+                        val list = it.rowList
+                        for (i in 0 until list.size) {
+                            list[i].order = i+1
+                        }
+
+                        memoDetailViewModel.memoTableData.value = it
+                    }
                 }
         }
     }

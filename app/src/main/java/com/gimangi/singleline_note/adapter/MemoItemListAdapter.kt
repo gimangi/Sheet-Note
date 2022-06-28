@@ -270,4 +270,9 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
         return dataList.indexOf(selectedRow)
     }
 
+    fun clearSelected() {
+        selectedRow = null
+        _selectCount.value = 0
+    }
+
 }
