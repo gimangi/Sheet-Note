@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Однострочное примечание</string>
+    <string name="toolbar_title_main">Список заметок</string>
+    <string name="search_memo_hint">поисковые заметки</string>
+    <string name="memo_edit_cancel">отменить</string>
+    <string name="dialog_memo_delete_cancel">отменить</string>
+    <string name="dialog_cancel">отменить</string>
+    <string name="memo_modify_cancel">отменить</string>
+    <string name="memo_delete_confirm">Удалить</string>
+    <string name="dialog_memo_delete_confirm">Удалить</string>
+    <string name="dialog_delete">Удалить</string>
+    <string name="memo_modify_remove_row">Удалить</string>
+    <string name="memo_edit_guide">Выберите заметки для удаления</string>
+    <string name="dialog_memo_delete_title">Вы уверены, что хотите удалить выбранные заметки?</string>
+    <string name="memo_status_items">ряды</string>
+    <string name="memo_create_toolbar_title">Создать заметку</string>
+    <string name="memo_create_confirm">полный</string>
+    <string name="memo_modify_confirm">полный</string>
+    <string name="memo_create_title">заглавие</string>
+    <string name="memo_create_suffix">Ед. изм</string>
+    <string name="memo_create_title_hint">Пожалуйста, введите название.</string>
+    <string name="memo_modify_toolbar_title">Изменить примечание</string>
+    <string name="memo_status_sum">сумма</string>
+    <string name="memo_status_avg">среднее</string>
+    <string name="memo_status_max">Максимум</string>
+    <string name="memo_status_min">мин</string>
+    <string name="memo_modify_insert_row">Вставить строку</string>
+</resources>

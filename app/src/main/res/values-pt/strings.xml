@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SingleLine Note</string>
+    <string name="toolbar_title_main">Lista de Notas</string>
+    <string name="search_memo_hint">notas de pesquisa</string>
+    <string name="memo_edit_cancel">cancelar</string>
+    <string name="dialog_memo_delete_cancel">cancelar</string>
+    <string name="dialog_cancel">cancelar</string>
+    <string name="memo_modify_cancel">cancelar</string>
+    <string name="memo_modify_confirm">completo</string>
+    <string name="memo_create_confirm">completo</string>
+    <string name="memo_modify_remove_row">Remover</string>
+    <string name="dialog_delete">excluir</string>
+    <string name="dialog_memo_delete_confirm">excluir</string>
+    <string name="memo_delete_confirm">excluir</string>
+    <string name="memo_status_sum">soma</string>
+    <string name="memo_status_avg">média</string>
+    <string name="memo_status_max">máximo</string>
+    <string name="memo_status_min">min</string>
+    <string name="memo_modify_insert_row">Inserir linha</string>
+    <string name="memo_modify_toolbar_title">Editar nota</string>
+    <string name="memo_create_suffix">unidade</string>
+    <string name="memo_create_title">título</string>
+    <string name="memo_create_title_hint">Insira um título.</string>
+    <string name="memo_create_toolbar_title">Criar nota</string>
+    <string name="memo_status_items">linhas</string>
+    <string name="dialog_memo_delete_title">Tem certeza de que deseja excluir as notas selecionadas?</string>
+    <string name="memo_edit_guide">Selecione notas para excluir</string>
+</resources>
