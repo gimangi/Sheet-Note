@@ -25,6 +25,11 @@ import com.gimangi.singleline_note.ui.shared.SlnDropDown
 import com.gimangi.singleline_note.ui.shared.showDropDown
 import com.gimangi.singleline_note.util.NumeralUtil
 import com.gimangi.singleline_note.util.dpToPx
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.DecimalFormat
 
@@ -38,12 +43,15 @@ class MemoDetailActivity :
 
     private var dropdown: SlnDropDown? = null
 
+    private var mInterstitialAd: InterstitialAd? = null
+
     companion object {
         val SUMMARY_LIST = arrayOf(
             R.string.memo_status_sum,
             R.string.memo_status_avg,
             R.string.memo_status_max,
             R.string.memo_status_min)
+        const val TAG = "DETAIL_VIEW"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +64,7 @@ class MemoDetailActivity :
         loadData()
         initClickListener()
         setCommaNumberText()
+        initAdmobFront()
     }
 
     override fun onPause() {
@@ -67,6 +76,15 @@ class MemoDetailActivity :
     override fun onResume() {
         super.onResume()
         loadData()
+    }
+
+    override fun onDestroy() {
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.show(this)
+        } else {
+            Log.d(TAG, "The interstitial ad wasn't ready yet.")
+        }
+        super.onDestroy()
     }
 
     private fun initBinding() {
@@ -162,6 +180,7 @@ class MemoDetailActivity :
 
         // 메모 행 편집 완료
         binding.btnModifyComplete.setOnClickListener {
+            memoItemListAdapter.clearSelected()
             memoItemListAdapter.modifyMode.set(false)
         }
 
@@ -331,5 +350,28 @@ class MemoDetailActivity :
         }
 
         return tableEntity
+    }
+
+    override fun initAdmob() {
+        MobileAds.initialize(this) {}
+        mAdView = binding.adViewBanner
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
+    }
+
+    private fun initAdmobFront() {
+        var adRequest = AdRequest.Builder().build()
+
+        InterstitialAd.load(this,getString(R.string.admob_front_id), adRequest, object : InterstitialAdLoadCallback() {
+            override fun onAdFailedToLoad(adError: LoadAdError) {
+                Log.d(TAG, adError?.toString())
+                mInterstitialAd = null
+            }
+
+            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                Log.d(TAG, "Ad was loaded.")
+                mInterstitialAd = interstitialAd
+            }
+        })
     }
 }
