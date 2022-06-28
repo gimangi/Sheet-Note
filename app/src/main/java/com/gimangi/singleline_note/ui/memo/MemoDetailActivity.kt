@@ -10,7 +10,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.SimpleItemAnimator
 import com.gimangi.singleline_note.R
 import com.gimangi.singleline_note.adapter.MemoItemListAdapter
 import com.gimangi.singleline_note.data.database.dto.MemoItemEntity
@@ -174,6 +173,9 @@ class MemoDetailActivity :
         }
 
         // 메모 행 삭제
+        binding.btnRemoveRow.setOnClickListener {
+            removeRows()
+        }
 
     }
 
@@ -214,6 +216,26 @@ class MemoDetailActivity :
         insertMemoRowAt(null)
     }
 
+    private fun removeRows() {
+        val removeList = memoItemListAdapter.selectedItems()
+        memoItemListAdapter.clearSelected()
+
+        val table = memoDetailViewModel.memoTableData.value
+        if (table != null) {
+            val rowList = table.rowList
+            for (r in removeList) {
+                rowList.remove(
+                    rowList.filter {
+                        it.order == r.number
+                    }[0]
+                )
+            }
+            val resultTable = realignTableItem(table)
+            memoDetailViewModel.memoTableData.postValue(resultTable)
+            memoDetailViewModel.updateMemoTable(resultTable)
+        }
+    }
+
     private fun insertMemoRowAt(index: Int?) {
         val table = memoDetailViewModel.memoTableData.value
 
@@ -227,14 +249,8 @@ class MemoDetailActivity :
             }
             else
                 memoDetailViewModel.insertMemoItemAt(index, table, row).observe(this) {
-                    if (it != null) {
-                        val list = it.rowList
-                        for (i in 0 until list.size) {
-                            list[i].order = i+1
-                        }
-
-                        memoDetailViewModel.memoTableData.value = it
-                    }
+                    if (it != null)
+                        memoDetailViewModel.memoTableData.value = realignTableItem(it)
                 }
         }
     }
@@ -307,4 +323,13 @@ class MemoDetailActivity :
         value = 0,
         tableId = table.memoId
     )
+
+    private fun realignTableItem(tableEntity: MemoTableEntity): MemoTableEntity {
+        val list = tableEntity.rowList
+        for (i in 0 until list.size) {
+            list[i].order = i+1
+        }
+
+        return tableEntity
+    }
 }

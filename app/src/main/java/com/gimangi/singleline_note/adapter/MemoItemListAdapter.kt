@@ -251,7 +251,7 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
         realign()
     }
 
-    fun realign() {
+    private fun realign() {
         for (i in 0 until dataList.size) {
             val data = dataList[i].data
             data.number = i+1
@@ -270,9 +270,19 @@ class MemoItemListAdapter : RecyclerView.Adapter<MemoItemListAdapter.MemoItemHol
         return dataList.indexOf(selectedRow)
     }
 
+    fun selectedItems(): List<MemoItemData> {
+        return dataList.filter {
+            it.selected.get() == true
+        }.map {
+            it.data
+        }
+    }
+
     fun clearSelected() {
         selectedRow = null
         _selectCount.value = 0
+        for (d in dataList)
+            d.selected.set(false)
     }
 
 }
