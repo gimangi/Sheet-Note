@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">원라인 메모</string>
+    <string name="app_name">한줄 노트</string>
     <string name="toolbar_title_main">전체 메모</string>
     <string name="search_memo_hint">검색할 내용</string>
     <string name="memo_edit_cancel">취소</string>

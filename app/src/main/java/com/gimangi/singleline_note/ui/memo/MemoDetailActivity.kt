@@ -64,7 +64,7 @@ class MemoDetailActivity :
         loadData()
         initClickListener()
         setCommaNumberText()
-        initAdmobFront()
+        // initAdmobFront()
     }
 
     override fun onPause() {
