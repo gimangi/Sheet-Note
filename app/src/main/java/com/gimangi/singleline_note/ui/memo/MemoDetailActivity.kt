@@ -253,6 +253,7 @@ class MemoDetailActivity :
             memoDetailViewModel.memoTableData.postValue(resultTable)
             memoDetailViewModel.updateMemoTable(resultTable)
         }
+        updateSummary()
     }
 
     private fun insertMemoRowAt(index: Int?) {
@@ -272,6 +273,7 @@ class MemoDetailActivity :
                         memoDetailViewModel.memoTableData.value = realignTableItem(it)
                 }
         }
+        updateSummary()
     }
 
     private fun showSummaryDropDown() {
