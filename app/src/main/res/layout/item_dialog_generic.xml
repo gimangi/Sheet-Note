@@ -25,6 +25,8 @@
             android:textFontWeight="400"
             android:includeFontPadding="false"
             android:textSize="14sp"
+            android:minWidth="200dp"
+            android:textAlignment="center"
             android:textColor="@color/black"
             android:layout_marginTop="17dp"
             android:layout_marginHorizontal="21dp"
@@ -32,37 +34,48 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-        <android.widget.Button
-            android:id="@+id/btn_dialog_cancel"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/ll_dialog_buttons"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:background="@android:color/transparent"
-            android:text="@{dialogText.cancel}"
-            android:textColor="@color/gray2"
-            android:fontFamily="@font/noto_sans_kr"
-            android:textFontWeight="400"
-            android:includeFontPadding="false"
-            android:textSize="14sp"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btn_dialog_confirm"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_dialog_detail" />
-
-        <android.widget.Button
-            android:id="@+id/btn_dialog_confirm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:text="@{dialogText.confirm}"
-            android:textColor="@color/red"
-            android:fontFamily="@font/noto_sans_kr"
-            android:textFontWeight="400"
-            android:includeFontPadding="false"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_dialog_cancel"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btn_dialog_cancel" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_dialog_detail">
+
+            <android.widget.Button
+                android:id="@+id/btn_dialog_cancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:textAlignment="center"
+                android:fontFamily="@font/noto_sans_kr"
+                android:includeFontPadding="false"
+                android:text="@{dialogText.cancel}"
+                android:textColor="@color/gray2"
+                android:textFontWeight="400"
+                android:textSize="14sp" />
+
+            <android.widget.Button
+                android:id="@+id/btn_dialog_confirm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:textAlignment="center"
+                android:fontFamily="@font/noto_sans_kr"
+                android:includeFontPadding="false"
+                android:text="@{dialogText.confirm}"
+                android:textColor="@color/red"
+                android:textFontWeight="400"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -46,19 +46,7 @@ class SlnGenericDialog(private val context: Context) {
         )
         dialog.window?.setBackgroundDrawableResource(R.drawable.rectangle_fill_white_12)
 
-        adjustViewWidth(binding.btnDialogCancel, binding.btnDialogConfirm)     // 버튼 길이를 긴 쪽에 맞춤
-
         dialog.show()
 
-    }
-
-    private fun adjustViewWidth(view1: TextView, view2: TextView) {
-
-        dialog.setOnShowListener {
-            val minView = if (view1.width < view2.width) view1 else view2
-            val maxView = if (minView == view1) view2 else view1
-
-            minView.width = maxView.width
-        }
     }
 }
