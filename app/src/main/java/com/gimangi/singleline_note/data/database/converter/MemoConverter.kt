@@ -17,15 +17,15 @@ class MemoConverter {
         @TypeConverter
         fun strToList(str: String?): List<MemoItemEntity> {
             if (str.isNullOrEmpty())
-                return emptyList()
+                return mutableListOf()
             return gson.fromJson<List<MemoItemEntity>>(str)
         }
 
         @JvmStatic
         @TypeConverter
-        fun listToStr(lst: List<MemoItemEntity>): String? {
+        fun listToStr(lst: List<MemoItemEntity>): String {
             if (lst.isEmpty()) {
-                return null
+                return ""
             }
             return gson.toJson(lst)
         }

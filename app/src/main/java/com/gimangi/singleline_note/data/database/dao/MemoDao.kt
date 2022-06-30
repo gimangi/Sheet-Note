@@ -29,6 +29,7 @@ abstract class MemoDao {
         updateMemoTable(
             memoTableEntity.apply {
                 updatedAt = Date()
+
                 if (index == null)
                     rowList.add(memoItemEntity)
                 else
