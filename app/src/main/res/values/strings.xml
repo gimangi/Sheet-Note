@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SingleLine Note</string>
+    <string name="app_name">Sheet Notes</string>
 
     <!-- memo main -->
     <string name="toolbar_title_main">Note List</string>

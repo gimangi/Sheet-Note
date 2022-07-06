@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Однострочное примечание</string>
+    <string name="app_name">Примечания к листу</string>
     <string name="toolbar_title_main">Список заметок</string>
     <string name="search_memo_hint">поисковые заметки</string>
     <string name="memo_edit_cancel">отменить</string>

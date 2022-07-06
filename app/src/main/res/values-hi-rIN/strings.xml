@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SingleLine Note</string>
+    <string name="app_name">शीट नोट्स</string>
     <string name="memo_modify_insert_row">पंक्ति डालें</string>
     <string name="memo_modify_remove_row">हटाना</string>
     <string name="memo_modify_confirm">पूरा</string>

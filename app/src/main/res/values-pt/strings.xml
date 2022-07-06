@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SingleLine Note</string>
+    <string name="app_name">Notas da Folha</string>
     <string name="toolbar_title_main">Lista de Notas</string>
     <string name="search_memo_hint">notas de pesquisa</string>
     <string name="memo_edit_cancel">cancelar</string>
